@@ -1,0 +1,29 @@
+<section class="organization-settings">
+  {{#if this.showOrganizationSettings}}
+    {{#if this.scrollToInsights}}
+      <ScrollHere />
+    {{/if}}
+    <section class="insights-visibility-settings" data-test-insights-settings>
+      <h3 data-test-insights-settings-title>
+        Insights Visibility Settings
+      </h3>
+      <div class="insights-settings">
+        <p class="description" data-test-insights-settings-description>
+          Make more informed decisions about your development workflow using your build Insights. <br />
+          <LinkTo
+            @route="owner.repositories"
+            @models={{array this.organization.provider this.organization.login}}
+            @query={{hash tab="insights"}}
+          >
+            View {{this.organization.fullName}}'s Insights
+          </LinkTo>
+        </p>
+        <VisibilitySettingList
+          @options={{this.insightsVisibilityOptions}}
+          @initialKey={{this.privateInsightsVisibility}}
+          @onConfirm={{action "setInsightsVis"}}
+        />
+      </div>
+    </section>
+  {{/if}}
+</section>

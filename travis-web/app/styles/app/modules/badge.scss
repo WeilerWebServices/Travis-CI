@@ -1,0 +1,74 @@
+.badge {
+  display: inline-block;
+  padding: 0 0.7em;
+  margin: 0 0.6em;
+  border-radius: 15px;
+  font-size: 1rem;
+  color: $dozer-yellow;
+  border: 1px solid $canary-yellow;
+  background: $haze-yellow;
+
+  &.message-label {
+    position: relative;
+    top: -1px;
+    background: $pebble-grey;
+    border: 0;
+    padding: 0 0.5em;
+    margin: 0 0.3em 0 0;
+    color: $cement-grey;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  &.deprecated {
+    color: $brick-red;
+    background-color: $quartz-red;
+    border-color: $brick-red;
+  }
+
+  &.grey {
+    color: $asphalt-grey;
+    background-color: $pebble-grey;
+  }
+
+  &.green {
+    color: $turf-green;
+    background-color: rgba(197,226,197, 0.5);
+  }
+
+  &.red {
+    color: $dark-red;
+    background-color:rgb(255, 220, 220);
+  }
+
+  &.square {
+    border-radius: 0;
+    border-width: 0;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 0.1em 0.5em;
+    letter-spacing: 0.05em;
+  }
+}
+
+$badge-size: 10px;
+
+.dot-badge {
+  position: relative;
+
+  &::after {
+    opacity: 0.5;
+    content: '';
+    position: absolute;
+    left: 100%;
+    top: $badge-size / 10;
+    margin-left: $badge-size / 5;
+    height: $badge-size;
+    width: $badge-size;
+    border-radius: $badge-size / 2;
+    background-color: $oxide-blue;
+  }
+
+}

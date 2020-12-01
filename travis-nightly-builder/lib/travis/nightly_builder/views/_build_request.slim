@@ -1,0 +1,61 @@
+p Not finding what you are looking for? Use this form to request a build
+
+form action="/build" method="post"
+  table
+    tr
+      th Language
+      th Branch to build
+      th OS
+      th Release (For Linux and FreeBSD)
+      th macOS version
+      th Arch
+      th Version
+      th Alias
+    tr
+      td
+        select name="repo"
+          option value="travis-erlang-builder" selected="true" Erlang
+          option value="perl-builder" Perl
+          option value="php-src-builder" PHP
+          option value="cpython-builder" Python
+          option value="travis-rubies" Ruby
+      td
+        select name="branch"
+          option value="default" selected="true" default (for most languages)
+          option value="build" build (for Ruby)
+      td
+        select name="os"
+          option value=""
+          option value="freebsd" FreeBSD
+          option value="osx" macOS
+          option value="linux" selected="true" Linux (Ubuntu)
+      td
+        select name="dist"
+          option value="" selected="true"
+          option value="focal" Ubuntu Focal (20.04)
+          option value="bionic" Ubuntu Bionic (18.04)
+          option value="xenial" Ubuntu Xenial (16.04)
+          option value="12.0" FreeBSD 12.0
+      td
+        select name="osx_image"
+          option value="" selected="true"
+          option value="xcode11.4.1" Catalina (10.15)
+          option value="xcode10.2" Mojave (10.14)
+          option value="xcode9.4" High Sierra (10.13)
+          option value="xcode8.3" Sierra (10.12)
+          option value="xcode7.3" El Capitan (10.11)
+      td
+        select name="arch"
+          option value=""
+          option value="x86_64" selected="true" x86_64 (a.k.a. AMD64)
+          option value="arm64" ARM
+          option value="ppc64le" POWER (little endian)
+          option value="s390x" IBM Z (s390x)
+      td
+        input type="text" name="version" value="" maxlength="32" required="required"
+      td
+        input type="text" name="alias" value="" maxlength="128"
+
+  button type="submit" name="build-request-submit" Submit
+
+hr

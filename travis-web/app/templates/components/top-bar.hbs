@@ -1,0 +1,23 @@
+<div class="topbar {{if this.isNavigationOpen 'expanded'}} {{if this.showBroadcasts 'expanded'}}" >
+  <HeaderBurgerMenu @isOpen={{this.isNavigationOpen}} @onClick={{action 'toggleNavigation'}} />
+  <h1 id="logo" class="logo">
+    <LinkTo @route="index">
+      Travis CI
+    </LinkTo>
+  </h1>
+  <HeaderBroadcasts @showBroadcasts={{this.showBroadcasts}} />
+  <HeaderLinks @isOpen={{this.isNavigationOpen}} />
+  <ProfileMenu />
+</div>
+{{#if this.features.enterpriseVersion}}
+  <EnterpriseBanner />
+{{/if}}
+{{#if hasBlock}}
+  {{yield}}
+{{else if this.showCta}}
+  <div class="cta">
+    <p class="row">
+      Help make Open Source a better place and start building better software today!
+    </p>
+  </div>
+{{/if}}

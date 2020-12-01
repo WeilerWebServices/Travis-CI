@@ -1,0 +1,20 @@
+{
+  "name": "Hub Load Average 5m",
+  "type": "line",
+  "streams": [
+    {
+      "metric": "heroku.logs.load_avg_5m",
+      "type": "gauge",
+      "source": "%{app}-next.*",
+      "group_function": "breakout",
+      "summary_function": "average",
+      "downsample_function": "average"
+    },
+    {
+      "metric": "heroku.logs.releases",
+      "type": "annotation",
+      "source": "%{app}-next",
+      "downsample_function": "average"
+    }
+  ]
+}

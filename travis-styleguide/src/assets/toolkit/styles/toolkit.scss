@@ -1,0 +1,39 @@
+/**
+ * Toolkit styles
+ */
+
+// @import url(http://localhost:4200/assets/travis.css)
+
+@import "foundation/scss/foundation";
+
+@import "elements/typography";
+@import "elements/forms";
+@import "elements/code";
+
+@import "modules/icons";
+@import "modules/media";
+@import "modules/accounts";
+@import "modules/buttons";
+@import "modules/flash";
+@import "modules/loading-indicator";
+@import "modules/row";
+@import "modules/titles";
+@import "modules/switch";
+@import "modules/tooltips";
+@import "modules/notice";
+
+@import "modules/owner-tile";
+
+
+*, *:before, *:after {
+  font-family: 'Source Sans Pro', Helvetica, sans-serif;
+  box-sizing: inherit;
+}
+
+html, body {
+  // text-rendering: optimizeLegibility;
+  box-sizing: border-box;
+  font-size: 16px;
+  color: $grey-dark;
+  font-family: 'Source Sans Pro', Helvetica, sans-serif;
+}

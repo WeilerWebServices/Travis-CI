@@ -1,0 +1,5 @@
+<RepoBuildList
+  @repo={{this.repo}}
+  @eventTypes='pull_request'
+  @missingNotice="No {{vcs-vocab this.repo.vcsType 'pullRequest' lower=true}} builds for this repository"
+/>

@@ -1,0 +1,8 @@
+language: node_js
+sudo: false
+
+before_script:
+  - bundle install
+  - bundle exec rakep
+
+script: node spec/spec.js

@@ -1,0 +1,20 @@
+{
+  "name": "Hub Update median",
+  "type": "line",
+  "streams": [
+    {
+      "metric": "hub.worker.handle.median",
+      "type": "gauge",
+      "source": "%{app}-next*",
+      "group_function": "breakout",
+      "summary_function": "average",
+      "downsample_function": "average"
+    },
+    {
+      "metric": "heroku.logs.releases",
+      "type": "annotation",
+      "source": "%{app}",
+      "downsample_function": "average"
+    }
+  ]
+}

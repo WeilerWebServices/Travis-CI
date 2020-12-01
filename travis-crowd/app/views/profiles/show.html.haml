@@ -1,0 +1,34 @@
+%div#profile
+  %h2{:'data-object' => 'user'}
+    %img{ src: current_user.gravatar_url(:size => 50) }
+    = current_user_editable(:span, :name)
+
+  #contact
+    %h3 Contact
+
+    %dl{:'data-object' => 'user'}
+      %dt Email
+      = current_user_editable(:dd, :email)
+      %dt Twitter
+      = current_user_editable(:dd, :twitter_handle)
+      %dt Github
+      = current_user_editable(:dd, :github_handle)
+      %dt Homepage
+      = current_user_editable(:dd, :homepage)
+
+  - unless current_user.subscriptions.empty?
+    #subscriptions
+      %h3 Subscriptions
+      %table
+        = render current_user.subscriptions
+
+  - unless current_user.packages.empty?
+    #packages
+      %h3 Packages
+      %table
+        = render current_user.packages
+
+  #ringtones
+    %h3 Ringtones
+    :markdown
+      Feel free to download the [ringtones](/profile/ringtones) and other recordings.

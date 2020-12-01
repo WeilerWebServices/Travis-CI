@@ -1,0 +1,83 @@
+---
+title: Donate to Travis Foundation
+layout: project
+---
+
+<article class="page">
+  <div class="inner">
+    <header class="page-intro">
+      <h1>Donate to Travis Foundation</h1>
+      <p>Travis Foundation is a German non-profit (gemeinnützige Unternehmergesellschaft) that supports diversity in tech and Open Source Software.</p>
+    </header>
+    <div class="page-main">
+      <p>You can make a donation via credit card.</p>
+      <p>In case you want to make a donation to a <strong>specific project</strong> or need a <strong>donation receipt</strong>,<br> please email us (foundation@travis-ci.org) mentioning the email address and the date of the donation.</p>
+      <div class="js-stripe-checkout">
+        <noscript>You must enable JavaScript in your web browser to proceed with the donation.</noscript>
+        <script src="https://js.stripe.com/v3/"></script>
+        <form id="donation-checkout">
+          <label>
+            Amount <small>(in EUR)</small>
+            <input name="donation-amount" type="number" id="donation-amount" placeholder="e.g. 20">
+          </label>
+          <button style="cursor:pointer" id="donation-btn" class="button">Donate</button>
+        </form>
+        <br/>
+        <div id="donation-result"></div>
+
+        <script>
+          const stripe = Stripe('pk_live_CDQ1VjqbJHkFUm1qOGzeMI30');
+          const resultBox = document.getElementById('donation-result');
+          const button = document.getElementById("donation-btn");
+
+          if(window.location.search.split("?")[1] === "success") {
+            resultBox.innerText = "Your donation was successful. Thank you!"
+          }
+
+          button.addEventListener("click", function(ev) {
+            ev.preventDefault();
+            let amount = document.getElementById("donation-amount").value;
+            if(amount >= 0.5) { // min amount required by stripe
+
+              button.style.opacity = "0.5";
+              button.setAttribute("disabled", "disabled");
+              resultBox.innerText = "Processing donation ...";
+
+              postForm("https://www.ranorex.com/wp-json/sage/v2/travis/foundation-donation", "donation-checkout")
+              .then(data => {
+                stripe.redirectToCheckout({
+                  sessionId: data["id"]
+                }).then(function (result) {
+                  resultBox.innerText = "Whoops, something went wrong. Your donation did not get through.";
+                  button.style.opacity = "1";
+                  button.removeAttribute("disabled");
+                  console.log(result);
+                });
+              })
+              .catch(error => {
+                resultBox.innerText = "Whoops, something went wrong. Your donation did not get through.";
+                button.style.opacity = "1";
+                button.removeAttribute("disabled");
+                console.log(error);
+              })
+            }
+            else {
+              resultBox.innerText = "The minimum donation amount is €0.5";
+            }
+          });
+
+          function postForm(url, formID) {
+            const formData = new FormData(document.getElementById(formID));
+
+            return fetch(url, {
+              method: 'POST',
+              body: formData  // a FormData will automatically set the 'Content-Type'
+            })
+            .then(response => response.json())
+          }
+
+        </script>
+      </div>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,196 @@
+{
+  "platinum": [
+    {
+      "url": "http://www.wooga.com",
+      "image": "/images/sponsors/wooga-210x210.png",
+      "text": "<p><a href=\"http://www.wooga.com\">Wooga</a> is one of the most popular social games developers for web and mobile in the world. The company is based in Berlin, Europe's creative heart and mecca for tech industry innovators.</p><p><a href=\"http://www.wooga.com\">Wooga</a> was founded in 2009 and now employs 280 people from more than 40 nations, who work together to develop top titles for a global audience. The studio's signature approach to game design emphasizes emotional character development, usability, and superb localization. Wooga's free-to-play games are enjoyed by around 50 million players per month.</p><p>For more information please visit: <a href=\"http://www.wooga.com\">www.wooga.com</a></p>"
+    },
+    {
+      "url": "http://bendyworks.com",
+      "image": "/images/sponsors/bendyworks-210x210.png",
+      "text": "<p><a href=\"http://bendyworks.com\">Bendyworks</a> is an agile Ruby on Rails &amp; iOS development consulting shop that hails from Madison, Wisconsin, USA. Bendyworks was founded in 2009 to turn great ideas into elegant applications, with plenty of room for creative revision and refinement along the way, while saving time &amp; money.</p><p>The way Bendyworks approaches projects can be summed up in a single word: flexibility. From the frequent and clear communication down to the methods used to code, the entire process revolves around staying nimble and adaptable to client needs.</p><p>Bendyworks also believes strongly in the power of community. From hosting local meetups to writing open source code, Bendyworks is committed to the programming community.</p>"
+    },
+    {
+      "url": "http://cloudcontrol.com",
+      "image": "/images/sponsors/cloudcontrol-210x210.png",
+      "text": "<p><a href=\"https://www.cloudcontrol.com\">cloudControl</a> is PaaS made in Berlin, Germany. Since 2009 we're dedicated to supercharge development by building the best platform possible to help developers build better apps faster.</p><p>The <a href=\"https://www.cloudcontrol.com\">cloudControl</a> platform features agile deployments, rock-solid autoscaling infrastructure and pay-as-you-go pricing out of Amazon's European datacenters.</p><p>With the <a href=\"https://www.cloudcontrol.com\">cloudControl</a> Add-on market we bring developers all the third party Cloud services they need easily integratable into their own apps and let them take projects from idea to product faster than ever before.</p>"
+    },
+    {
+      "url": "http://xing.de",
+      "image": "/images/sponsors/xing-210x210.png",
+      "text": "<p><a href=\"https://xing.de\">XING</a> is a social network with over 11 million members. We are the leading network for business professionals in Europe. Based in Hamburg, Germany.</p><p>XING is really into teamwork and using agile techniques. Independent, focused teams build our platform's products. We have been coding Rails since 2006.</p><p>XING <a href=\"https://github.com/xing\">contributes</a> to open source and hosts meetups, user groups, after-work events and workshops.</p><p>We are <a href=\"http://devblog.xing.com/we-are-hiring/\">looking for talented people</a> to build the social network of the future in Rails, iOS, Android &amp; Perl.</p>"
+    }
+  ],
+  "gold": [
+    {
+      "url": "http://heroku.com",
+      "image": "/images/sponsors/heroku-205x130.png",
+      "text": "<p>Get up and running in minutes, and deploy instantly with git. Run and scale any type of app. Focus 100% on your code, and never think about servers, instances, or VMs again.</p>"
+    },
+    {
+      "url": "http://soundcloud.com",
+      "image": "/images/sponsors/soundcloud-205x130.png",
+      "text": "<p><a href=\"http://soundcloud.com\">SoundCloud</a> is an audio platform that enables anyone to upload, record, promote and share their originally-created sounds across the internet, in a simple, accessible and feature-rich way.</p>"
+    },
+    {
+      "url": "http://nedap.com",
+      "image": "/images/sponsors/nedap-205x130.png",
+      "text": "<p>At <a href=\"http://nedap.com\">Nedap</a> we work on solutions for important, real problems like sufficient food for a growing population, clean drinking water and smart networks for sustainable energy.</p>"
+    },
+    {
+      "url": "http://mongohq.com",
+      "image": "/images/sponsors/mongohq-205x130.png",
+      "text": "<p><a href=\"http://mongohq.com\">MongoHQ</a> is the hosted database solution for getting you up and running on MongoDB, fast. From free shared plans to custom dedicated solutions, we handle all the levels of your data layer.</p>"
+    },
+    {
+      "url": "http://zweitag.de",
+      "image": "/images/sponsors/zweitag-205x130.png",
+      "text": "<p><a href=\"http://www.zweitag.de\">Zweitag</a> is a software engineering consultancy. We create beautiful web apps. Our agile solutions for complex technical problems are based on the right tools (e.g Ruby on Rails, node.js, nosql).</p>"
+    },
+    {
+      "url": "http://kanbanery.com",
+      "image": "/images/sponsors/kanbanery-205x130.png",
+      "text": "<p><a href=\"http://kanbanery.com\">Kanbanery</a>, a product of <a href=\"http://www.lunarlogicpolska.com\">Lunar Logic Polska</a>, is a web-based task manager that helps you work more effectively, alone and together, by visualizing work in progress on your projects.</p>"
+    },
+    {
+      "url": "http://ticketevolution.com",
+      "image": "/images/sponsors/ticketevolution-205x130.jpg",
+      "text": "<p><a href=\"http://ticketevolution.com\">Ticket Evolution</a> is the engineering backbone of the open ticket market. We're an expanding team of Ruby engineers who love open source software. Join us.</p>"
+    },
+    {
+      "url": "http://plan.io/travis",
+      "image": "/images/sponsors/planio-205x130.png",
+      "text": "<p><a href=\"http://plan.io/travis\">Planio</a> is a Redmine and Git hosting service. We specialize in rock solid and blazingly fast infrastructure for your code and project hosting as well as super-friendly and dedicated support.</p>"
+    }
+  ],
+  "silver": [
+    {
+      "url": "http://cobot.me",
+      "image": "/images/sponsors/cobotme-205x60.png"
+    },
+    {
+      "url": "http://jumpstartlab.com",
+      "image": "/images/sponsors/jumpstartlab-205x60.png"
+    },
+    {
+      "url": "http://evilmartians.com",
+      "image": "/images/sponsors/evilmartians-205x60.png"
+    },
+    {
+      "url": "http://zendesk.com",
+      "image": "/images/sponsors/zendesk-205x60.png"
+    },
+    {
+      "url": "http://stripe.com",
+      "image": "/images/sponsors/stripe-205x60.png"
+    },
+    {
+      "url": "http://basho.com",
+      "image": "/images/sponsors/basho-205x60.png"
+    },
+    {
+      "url": "http://thinkrelevance.com",
+      "image": "/images/sponsors/thinkrelevance-205x60.png"
+    },
+    {
+      "url": "http://mindmatters.de",
+      "image": "/images/sponsors/mindmatters-205x60.png"
+    },
+    {
+      "url": "http://amenhq.com",
+      "image": "/images/sponsors/amen-205x60.jpg"
+    },
+    {
+      "url": "http://www.site5.com",
+      "image": "/images/sponsors/site5-205x60.png"
+    },
+    {
+      "url": "http://www.8thlight.com",
+      "image": "/images/sponsors/8thlight-205x60.jpg"
+    },
+    {
+      "url": "http://www.crowdint.com",
+      "image": "/images/sponsors/crowdinteractive-205x60.png"
+    },
+    {
+      "url": "http://atomicobject.com/detroit",
+      "image": "/images/sponsors/atomicobject-205x60.png"
+    },
+    {
+      "url": "http://codeminer.com.br",
+      "image": "/images/sponsors/codeminer-205x60.png"
+    },
+    {
+      "url": "http://cloudant.com",
+      "image": "/images/sponsors/cloudant-205x60.jpg"
+    },
+    {
+      "url": "http://gidsy.com",
+      "image": "/images/sponsors/gidsy-205x60.png"
+    },
+    {
+      "url": "http://agileanimal.com",
+      "image": "/images/sponsors/agileanimal-205x60.png"
+    },
+    {
+      "url": "http://5apps.com",
+      "image": "/images/sponsors/5apps-205x60.png"
+    },
+    {
+      "url": "http://meltmedia.com",
+      "image": "/images/sponsors/meltmedia-205x60.png"
+    },
+    {
+      "url": "http://www.fngtps.com",
+      "image": "/images/sponsors/fingertips-205x60.png"
+    },
+    {
+      "url": "http://www.engineyard.com",
+      "image": "/images/sponsors/engineyard-205x60.png"
+    },
+    {
+      "url": "http://www.malwarebytes.org",
+      "image": "/images/sponsors/malwarebytes-205x60.png"
+    },
+    {
+      "url": "http://readmill.org",
+      "image": "/images/sponsors/readmill-205x60.png"
+    },
+    {
+      "url": "http://www.mdsol.com",
+      "image": "/images/sponsors/medidata-205x60.png"
+    },
+    {
+      "url": "http://coderwall.com/teams/4f27194e973bf000040005f0",
+      "image": "/images/sponsors/esm-205x60.png"
+    },
+    {
+      "url": "http://twitter.com",
+      "image": "/images/sponsors/twitter-205x60.png"
+    },
+    {
+      "url": "http://tupalo.com",
+      "image": "/images/sponsors/tupalo-205x60.png"
+    },
+    {
+      "url": "http://fiksu.com",
+      "image": "/images/sponsors/fiksu-205x60.png"
+    },
+    {
+      "url": "http://pivotallabs.com",
+      "image": "/images/sponsors/pivotallabs-205x60.png"
+    },
+    {
+      "url": "http://saucelabs.com",
+      "image": "/images/sponsors/saucelabs-205x60.png"
+    },
+    {
+      "url": "http://mogotest.com",
+      "image": "/images/sponsors/mogo-205x60.png"
+    },
+    {
+      "url": "http://busyconf.com",
+      "image": "/images/sponsors/busyconf-205x60.png"
+    }
+  ]
+}

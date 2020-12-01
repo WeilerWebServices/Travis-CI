@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")/.."
+
+if [[ $PORT ]] ; then
+  : ${PUDDING_WEB_HOSTNAME:=http://localhost:5000}
+fi
+
+export PUDDING_WEB_HOSTNAME
+
+cmd="pudding-workers"
+if [[ ! $DYNO ]] ; then
+  exec rerun -p '**/*.{js,css,go}' "make && $cmd"
+fi
+exec $cmd

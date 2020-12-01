@@ -1,0 +1,20 @@
+{
+  "name": "Hub Update 95th percentile",
+  "type": "line",
+  "streams": [
+    {
+      "metric": "hub.worker.handle.95th_percentile",
+      "type": "gauge",
+      "source": "%{app}-next-production.*",
+      "group_function": "breakout",
+      "summary_function": "average",
+      "downsample_function": "average"
+    },
+    {
+      "metric": "heroku.logs.releases",
+      "type": "annotation",
+      "source": "%{app}",
+      "downsample_function": "average"
+    }
+  ]
+}

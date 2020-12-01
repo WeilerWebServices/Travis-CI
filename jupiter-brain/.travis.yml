@@ -1,0 +1,41 @@
+language: go
+go: 1.11.x
+
+env:
+  global:
+  - UNAME="$(uname | tr '[:upper:]' '[:lower:]')"
+
+addons:
+  artifacts:
+    paths:
+    - './build/$UNAME/amd64/jb-server'
+    target_paths:
+    - 'travis-ci/jupiter-brain/$TRAVIS_BUILD_NUMBER/$TRAVIS_JOB_NUMBER'
+    - 'travis-ci/jupiter-brain/$(git describe --always --dirty --tags)'
+    - 'travis-ci/jupiter-brain/$TRAVIS_BRANCH'
+
+before_install:
+- go get github.com/FiloSottile/gvt
+
+script:
+- make deps
+- make test
+- make test-race
+- git diff --exit-code
+- git diff --cached --exit-code
+- make docker-build
+
+deploy:
+  provider: script
+  script: utils/docker-push
+  # we don't need this for docker, but the artifacts push does
+  skip_cleanup: true
+  on:
+    # push all non-PR builds to Docker Hub
+    all_branches: true
+    condition: "$TRAVIS_PULL_REQUEST == false"
+
+after_success:
+- mkdir -p build/$UNAME/amd64
+- cp -v ~/gopath/bin/jb-server build/$UNAME/amd64/jb-server
+- echo $ARTIFACTS_PATHS

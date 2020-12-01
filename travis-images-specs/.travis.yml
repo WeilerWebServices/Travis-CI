@@ -1,0 +1,8 @@
+language: ruby
+
+rvm: 2.3.4
+
+sudo: false
+
+script:
+- bundle exec rubocop

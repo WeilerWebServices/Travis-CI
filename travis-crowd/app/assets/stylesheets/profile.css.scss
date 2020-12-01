@@ -1,0 +1,101 @@
+#profile {
+  @include clearfix();
+
+  h2 {
+    display: block;
+    line-height: 50px;
+
+    img {
+      float: left;
+      margin-right: 18px;
+      @include border-radius(8px);
+      @include box-shadow(0px 0px 2px #ddd);
+    }
+    span {
+      padding-right: 24px;
+      &:hover {
+        background: url(/images/icons/edit.bigger.png) no-repeat right 20px;
+      }
+    }
+  }
+  #contact, #packages, #subscriptions, #ringtones {
+    width: 440px;
+  }
+  #contact {
+    float: left;
+    line-height: 160%;
+
+    dt {
+      margin-right: 20px;
+    }
+    dd {
+      width: 260px;
+      margin-left: 10px;
+      padding-left: 18px;
+
+      &:hover {
+        background: url(/images/icons/edit.png) no-repeat left 6px;
+      }
+      input {
+        width: 280px;
+      }
+    }
+  }
+  #packages, #subscriptions, #ringtones {
+    float: right;
+	  margin-bottom: 25px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+
+    tr:nth-child(odd) {
+      background-color: #f2f4f9;
+    }
+    tr.cancelled {
+      td, a {
+        color: #999;
+      }
+      td:not(.cancel) {
+        text-decoration: line-through;
+      }
+    }
+    td {
+      padding: 8px 16px;
+    }
+    form {
+      width: auto;
+    }
+  }
+}
+
+#ringtones {
+  table {
+    thead {
+      th {
+        position: relative;
+        font-weight: normal;
+        text-align: left;
+
+        .pagination {
+          top: 25px;
+          right: 0;
+          width: 400px;
+          text-align: right;
+        }
+      }
+    }
+    col {
+      &.col-track {
+        width: 400px;
+      }
+      &.col-duration {
+        width: 75px;
+      }
+      &.col-download {
+        width: 60px;
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+NAME:
+   artifacts - manage your artifacts!
+
+USAGE:
+   artifacts [global options] command [command options] [arguments...]
+
+
+COMMANDS:
+   upload, u	upload some artifacts!
+   help, h	Shows a list of commands or help for one command
+   
+GLOBAL OPTIONS:
+   --log-format, -f 	log output format (text, json, or multiline) [$ARTIFACTS_LOG_FORMAT]
+   --debug, -D		set log level to debug [$ARTIFACTS_DEBUG]
+   --quiet, -q		set log level to panic [$ARTIFACTS_QUIET]
+   --help, -h		show help
+   --version, -v	print the version
+   

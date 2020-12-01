@@ -1,0 +1,12 @@
+{
+  "name": "lounge-signup",
+  "version": "0.1.0",
+  "private": true,
+  "description": "",
+  "dependencies": {
+    "slackin": "~0.5"
+  },
+  "scripts": {
+    "test": "echo as if"
+  }
+}

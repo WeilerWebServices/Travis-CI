@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+$: << 'lib'
+
+require 'bundler/setup'
+require 'travis/workers'
+require 'core_ext/module/load_constants'
+
+[Travis::Workers, Travis].each do |target|
+  target.load_constants!(:skip => [/::AssociationCollection$/], debug: true)
+end
+
+app = Travis::Workers.new
+app.setup
+app.run

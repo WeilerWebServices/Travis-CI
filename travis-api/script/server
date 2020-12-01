@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")/.."
+
+. config/ruby_config.sh
+
+[ $PORT ]            || export PORT=3000
+[ $RACK_ENV ]        || export RACK_ENV=development
+[ $WEB_CONCURRENCY ] || export WEB_CONCURRENCY=$(script/web_concurrency)
+[ $NGINX_WORKERS ]   || export NGINX_WORKERS=$(script/web_concurrency --nginx)
+
+echo "port=$PORT rack_env=$RACK_ENV web_concurrency=$WEB_CONCURRENCY nginx_workers=$NGINX_WORKERS" >&2
+
+if [[ $RACK_ENV == "production" ]]; then
+  export tmp_dir=/tmp
+else
+  mkdir -p tmp
+  export tmp_dir=./tmp
+fi
+
+if [ "$PGBOUNCER_ENABLED" = '1' ] || [ "$PGBOUNCER_ENABLED" = 'true' ]; then
+  $bexec script/monitor-pgbouncer &
+fi
+
+cmd="unicorn config.ru -E $RACK_ENV -c config/unicorn.rb"
+[[ $RACK_ENV == "development" ]] && cmd="rerun -b -- $cmd"
+
+if [ -z "$DYNO" ]; then
+  cmd="bundle exec $cmd"
+else
+  cmd="bin/start-nginx $cmd"
+fi
+
+exec $cmd

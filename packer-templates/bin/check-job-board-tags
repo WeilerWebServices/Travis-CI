@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+#
+#+  Usage: check-job-board-tags [-h|--help|-l|--list-only]
+#+  -
+#+  Performs a series of assertions about the relationship between
+#+  different stacks' languages and features.  Some stacks are intended to be
+#+  subsets of others.  Some stacks are meant to be mutually exclusive.  These
+#+  relationships are checked via the assert-job-board-tags script, which
+#+  accepts batch inputs created by *this* script.
+#+  -
+
+set -o errexit
+
+main() {
+  set -o pipefail
+
+  case "$1" in
+  -h | --help | help)
+    __usage
+    exit 0
+    ;;
+  -l | --list-only)
+    CHECK_JOB_BOARD_TAGS_LIST_ONLY=1
+    ;;
+  esac
+
+  COMBOS=(
+    languages:excl:opal:stevonnie
+    languages:excl:sardonyx:stevonnie
+    languages:excl:sardonyx:opal
+    features:incl:sardonyx:opal
+  )
+
+  cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
+
+  if [[ "${CHECK_JOB_BOARD_TAGS_LIST_ONLY}" ]]; then
+    for cmd in "${COMBOS[@]}"; do
+      echo "${cmd//:/ }"
+    done
+    exit 0
+  fi
+
+  BATCH_INPUT=""
+  for cmd in "${COMBOS[@]}"; do
+    IFS=':' read -r -a parts <<<"${cmd}"
+    rec="${parts[0]}:${parts[1]}"
+    rec="${rec}:./cookbooks/travis_ci_${parts[2]}/attributes/default.rb"
+    rec="${rec}:./cookbooks/travis_ci_${parts[3]}/attributes/default.rb"
+    BATCH_INPUT="$BATCH_INPUT
+${rec}
+"
+  done
+
+  echo "${BATCH_INPUT}" | ./bin/assert-job-board-tags -i |
+    grep --color -E '^✘:.*|$'
+}
+
+__usage() {
+  awk '/^#\+  / {
+    sub(/^#\+  /, "", $0) ;
+    sub(/-$/, "", $0) ;
+    print $0
+  }' \
+    "${0}"
+}
+
+main "$@"

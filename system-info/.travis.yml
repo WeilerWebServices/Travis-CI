@@ -1,0 +1,52 @@
+language: ruby
+
+rvm:
+- 1.9.3
+- 2.3.1
+
+sudo: required
+
+dist: trusty
+
+env:
+  global:
+  - FORMATS=human,json
+  - TMPDIR=$TRAVIS_BUILD_DIR/tmp
+  - INTEGRATION_SPECS=1
+  - COVERAGE=1
+  - JOB_PORT_TIMEOUT_MAX=5
+  - RUBYOPT='-W0'
+  matrix:
+  - COMMANDS_FILE=lib/system_info/config/commands.yml
+  - COMMANDS_FILE=lib/system_info/config/mini_commands.yml
+
+before_script:
+- mkdir -p ~/bin $TRAVIS_BUILD_DIR/tmp
+- bundle exec rubocop --version
+- bundle exec rspec --version
+
+script:
+- bundle exec rubocop
+- bundle exec exe/system-info help report
+- bundle exec rspec
+- find $TMPDIR -name 'system_info.txt' -exec cat {} \;
+- find $TMPDIR -name 'system_info.json' | xargs -n 1 jq .
+- eval "$(./bin/prerelease-suffix-check)"
+- gem build system-info.gemspec
+- export SYSTEM_INFO_GEM=$(find . -maxdepth 1 -name '*.gem' | head -1)
+- gem install "${SYSTEM_INFO_GEM}"
+- hash -r
+- system-info help report
+
+after_success:
+- mkdir -p build
+- mv -v "${SYSTEM_INFO_GEM}" build/
+
+addons:
+  artifacts:
+    permissions: public-read
+    cache_control: private
+    paths:
+    - build/
+    target_paths:
+    - '/'

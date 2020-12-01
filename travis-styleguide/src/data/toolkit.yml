@@ -1,0 +1,41 @@
+colors:
+  builds:
+    passing: "#44A662"
+    failing: "#D94341"
+    canceled: "#CACECE"
+    booting: "#E5DA3F"
+  alerts:
+    success-font: "#44A662"
+    success-bg: "#3FA75F"
+    error-font: "#DB423C"
+    error-bg: "#DB423C"
+    warning-font: ""
+    warning-bg: ""
+    notice-font: ""
+    notice-bg: ""
+  layouts:
+    teal: "#5BA5A4"
+    grey-light: "#F7F7F7"
+    grey-medium: ""
+    grey-dark: ""
+  base:
+    cream-light: "#FAFAF8"
+    cream-dark: "#EFF0EC"
+    grey-light: "#A1A0A0"
+    grey-medium: "#969496"
+    grey-dark: "#808080"
+  secondary:
+    teal-light: "#63A4A3"
+    teal-dark: "#5BA5A4"
+    green-light: "#73c78d"
+    green-dark: "#3FA75F"
+    red-light: "#D7625F"
+    red-dark: "#DB423C"
+    yellow-light: "#D2C93B"
+    yellow-dark: "#CDBC2C"
+fontsizes:
+  font-size-s: "14px"
+  font-size-sm: "16px"
+  font-size-m: "18px"
+  font-size-ml: "22px"
+  font-size-l: "36px"

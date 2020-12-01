@@ -1,0 +1,6 @@
+commands:
+  common:
+    - name: ElasticSearch version
+      port: 9200
+      command: curl localhost:9200
+      pipe: "awk -F\\\" '/number/ { print $4 }'"

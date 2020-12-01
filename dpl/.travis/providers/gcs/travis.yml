@@ -1,0 +1,22 @@
+language: shell
+dist: xenial
+
+install: true
+script: true
+
+before_deploy:
+  - openssl aes-256-cbc -K $encrypted_81cf70da4be5_key -iv $encrypted_81cf70da4be5_iv -in .travis/providers/gcs/key.json.enc -out key.json -d
+  - .travis/providers/gcs/prepare
+  - python --version
+
+deploy:
+  - provider: gcs
+    key_file: key.json
+    bucket: dpl-test
+    local_dir: ./tmp/dpl_test
+    acl: public-read
+    cache_control: "private, max-age=0, no-transform"
+    detect_encoding: true
+
+after_deploy:
+  - .travis/providers/gcs/test || TRAVIS_TEST_RESULT=$?

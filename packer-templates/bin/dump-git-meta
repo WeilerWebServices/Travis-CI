@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+main() {
+  if [[ "${DEBUG}" ]]; then
+    set -o xtrace
+  fi
+
+  cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
+
+  : "${DEST_DIR:=./tmp/git-meta}"
+  mkdir -p "${DEST_DIR}"
+
+  local branch
+  branch="$(git rev-parse --abbrev-ref HEAD)"
+  local sha
+  sha="$(git describe --always --dirty)"
+
+  if [[ "${branch}" == 'HEAD' ]]; then
+    branch="${PACKER_TEMPLATES_BRANCH:-HEAD}"
+  fi
+
+  echo "${branch}" | tee "${DEST_DIR}/packer-templates-branch"
+  echo "${sha}" | tee "${DEST_DIR}/packer-templates-sha"
+}
+
+main "$@"

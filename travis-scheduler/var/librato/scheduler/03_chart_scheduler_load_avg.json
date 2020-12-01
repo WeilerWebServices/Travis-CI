@@ -1,0 +1,37 @@
+{
+  "name": "Scheduler Load Avg",
+  "type": "line",
+  "streams": [
+    {
+      "metric": "heroku.logs.load_avg_5m",
+      "type": "gauge",
+      "source": "%{app}.*",
+      "group_function": "breakout",
+      "summary_function": "max",
+      "split_axis": false
+    },
+    {
+      "metric": "heroku.logs.load_avg_15m",
+      "type": "gauge",
+      "source": "%{app}.*",
+      "group_function": "max",
+      "summary_function": "max",
+      "split_axis": false
+    },
+    {
+      "metric": "heroku.logs.load_avg_1m",
+      "type": "gauge",
+      "source": "%{app}.*",
+      "group_function": "max",
+      "summary_function": "max",
+      "split_axis": false
+    },
+    {
+      "metric": "heroku.logs.releases",
+      "type": "annotation",
+      "source": "*",
+      "split_axis": false
+    }
+  ],
+  "thresholds": null
+}

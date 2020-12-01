@@ -1,0 +1,15 @@
+- 1:
+  title: "Rails Girls Summer of Code"
+  text: "Rails Girls Summer of Code funds women and non-binary people around the world to work full-time on open source software projects in July-September."
+  image: "/images/rebrand/rgsoc.png"
+  link: "/projects/rgsoc/"
+- 2:
+  title: "Conference Support"
+  text: "Travis Foundation has supported various conferences by handling the financial side of things, so organisers can focus on organising."
+  image:
+  link: "/projects/conferences"
+- 3:
+  title: "Annual report"
+  text: "Our annual report offers an overview of the work we've done and goals we've reached with each project."
+  image:
+  link: "/projects/annual-report"

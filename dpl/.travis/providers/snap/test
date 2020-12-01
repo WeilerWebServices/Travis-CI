@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require 'open-uri'
+require 'json'
+
+$stdout.sync = true
+
+expected = "This is just a test: #{ENV['ID']}"
+actual = %x[dee-pee-ell-test]
+
+exit 0 if actual == expected
+
+abort 'failed'

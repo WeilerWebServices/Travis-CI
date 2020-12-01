@@ -1,0 +1,35 @@
+!!! 5
+%html
+  %head
+    %meta{:content => 'text/html; charset=UTF-8', :'http-equiv' => 'Content-Type'}
+    = stylesheet_link_tag 'email'
+
+  %body
+    .header
+      %img{src: 'http://love.travis-ci.org/images/travis-ci.png'}
+      %ul.contact
+        %li
+          E-Mail:
+          %a{href: 'mailto:contact@travis-ci.org'} contact@travis-ci.org
+        %li
+          Twitter:
+          %a{href: 'http://twitter.com/travisci'} @travisci
+
+    .content
+      = yield
+
+  %footer
+    %div
+      %img{src: 'http://love.travis-ci.org/images/footer.png'}
+
+      %ul.address
+        %li Travis CI GmbH
+        %li Prinzessinnenstrasse 20
+        %li 10969 Berlin
+        %li Germany
+
+      %ul
+        %li <a href="http://travis-ci.org">http://travis-ci.org</a>
+        %li <a href="mailto:contact@travis-ci.org">contact@travis-ci.org</a>
+        %li <a href="http://twitter.com/travisci">@travisci</a>
+        %li <a href="irc://irc.freenode.net#travis">irc.freenode.net#travis</a>

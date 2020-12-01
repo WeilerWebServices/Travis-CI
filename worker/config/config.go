@@ -1,0 +1,514 @@
+// Package config contains the flags and defaults for Worker configuration.
+package config
+
+import (
+	"fmt"
+	"io"
+	"os"
+	"reflect"
+	"sort"
+	"strings"
+	"time"
+
+	"gopkg.in/urfave/cli.v1"
+)
+
+var (
+	defaultAmqpURI                     = "amqp://"
+	defaultBaseDir                     = "."
+	defaultFilePollingInterval, _      = time.ParseDuration("5s")
+	defaultHTTPPollingInterval, _      = time.ParseDuration("3s")
+	defaultHTTPRefreshClaimInterval, _ = time.ParseDuration("5s")
+	defaultPoolSize                    = 1
+	defaultProviderName                = "docker"
+	defaultQueueType                   = "amqp"
+
+	defaultHardTimeout, _         = time.ParseDuration("50m")
+	defaultInitialSleep, _        = time.ParseDuration("1s")
+	defaultLogTimeout, _          = time.ParseDuration("10m")
+	defaultMaxLogLength           = 4500000
+	defaultScriptUploadTimeout, _ = time.ParseDuration("3m30s")
+	defaultStartupTimeout, _      = time.ParseDuration("4m")
+
+	defaultBuildCacheFetchTimeout, _ = time.ParseDuration("5m")
+	defaultBuildCachePushTimeout, _  = time.ParseDuration("5m")
+
+	defaultHostname, _ = os.Hostname()
+	defaultLanguage    = "default"
+	defaultDist        = "xenial"
+	defaultArch        = "amd64"
+	defaultGroup       = "stable"
+	defaultOS          = "linux"
+
+	configType = reflect.ValueOf(Config{}).Type()
+
+	defs = []*ConfigDef{
+		NewConfigDef("ProviderName", &cli.StringFlag{
+			Value: defaultProviderName,
+			Usage: "The name of the provider to use. See below for provider-specific configuration",
+		}),
+		NewConfigDef("QueueType", &cli.StringFlag{
+			Value: defaultQueueType,
+			Usage: `The name of the queue type to use ("amqp", "http", or "file")`,
+		}),
+		NewConfigDef("AmqpHeartbeat", &cli.DurationFlag{
+			Value: 10 * time.Second,
+			Usage: "The heartbeat timeout value defines after what time the peer TCP connection should be considered unreachable",
+		}),
+		NewConfigDef("AmqpConsumerPriority", &cli.IntFlag{
+			Value: 0,
+			Usage: "The consumer priority to set when consuming jobs",
+		}),
+		NewConfigDef("AmqpURI", &cli.StringFlag{
+			Value: defaultAmqpURI,
+			Usage: `The URI to the AMQP server to connect to (only valid for "amqp" queue type)`,
+		}),
+		NewConfigDef("LogsAmqpURI", &cli.StringFlag{
+			Usage: `The URI to the Logs AMQP server to connect to (only valid for "amqp" queue type)`,
+		}),
+		NewConfigDef("AmqpInsecure", &cli.BoolFlag{
+			Usage: `Whether to connect to the AMQP server without verifying TLS certificates (only valid for "amqp" queue type)`,
+		}),
+		NewConfigDef("AmqpTlsCert", &cli.StringFlag{
+			Usage: `The TLS certificate used to connet to the jobs AMQP server`,
+		}),
+		NewConfigDef("AmqpTlsCertPath", &cli.StringFlag{
+			Usage: `Path to the TLS certificate used to connet to the jobs AMQP server`,
+		}),
+		NewConfigDef("LogsAmqpTlsCert", &cli.StringFlag{
+			Usage: `The TLS certificate used to connet to the logs AMQP server`,
+		}),
+		NewConfigDef("LogsAmqpTlsCertPath", &cli.StringFlag{
+			Usage: `Path to the TLS certificate used to connet to the logs AMQP server`,
+		}),
+		NewConfigDef("BaseDir", &cli.StringFlag{
+			Value: defaultBaseDir,
+			Usage: `The base directory for file-based queues (only valid for "file" queue type)`,
+		}),
+		NewConfigDef("FilePollingInterval", &cli.DurationFlag{
+			Value: defaultFilePollingInterval,
+			Usage: `The interval at which file-based queues are checked (only valid for "file" queue type)`,
+		}),
+		NewConfigDef("PoolSize", &cli.IntFlag{
+			Value: defaultPoolSize,
+			Usage: "The size of the processor pool, affecting the number of jobs this worker can run in parallel",
+		}),
+		NewConfigDef("BuildAPIURI", &cli.StringFlag{
+			Usage: "The full URL to the build API endpoint to use. Note that this also requires the path of the URL. If a username is included in the URL, this will be translated to a token passed in the Authorization header",
+		}),
+		NewConfigDef("QueueName", &cli.StringFlag{
+			Usage: "The AMQP queue to subscribe to for jobs",
+		}),
+		NewConfigDef("HTTPPollingInterval", &cli.DurationFlag{
+			Value: defaultHTTPPollingInterval,
+			Usage: `Sleep interval between new job requests (only valid for "http" queue type)`,
+		}),
+		NewConfigDef("HTTPRefreshClaimInterval", &cli.DurationFlag{
+			Value: defaultHTTPRefreshClaimInterval,
+			Usage: `Sleep interval between job claim refresh requests (only valid for "http" queue type)`,
+		}),
+		NewConfigDef("LibratoEmail", &cli.StringFlag{
+			Usage: "Librato metrics account email",
+		}),
+		NewConfigDef("LibratoToken", &cli.StringFlag{
+			Usage: "Librato metrics account token",
+		}),
+		NewConfigDef("LibratoSource", &cli.StringFlag{
+			Value: defaultHostname,
+			Usage: "Librato metrics source name",
+		}),
+		NewConfigDef("SentryDSN", &cli.StringFlag{
+			Usage: "The DSN to send Sentry events to",
+		}),
+		NewConfigDef("SentryHookErrors", &cli.BoolFlag{
+			Usage: "Add logrus.ErrorLevel to logrus sentry hook",
+		}),
+		NewConfigDef("Hostname", &cli.StringFlag{
+			Value: defaultHostname,
+			Usage: "Host name used in log output to identify the source of a job",
+		}),
+		NewConfigDef("DefaultLanguage", &cli.StringFlag{
+			Value: defaultLanguage,
+			Usage: "Default \"language\" value for each job",
+		}),
+		NewConfigDef("DefaultDist", &cli.StringFlag{
+			Value: defaultDist,
+			Usage: "Default \"dist\" value for each job",
+		}),
+		NewConfigDef("DefaultArch", &cli.StringFlag{
+			Value: defaultArch,
+			Usage: "Default \"arch\" value for each job",
+		}),
+		NewConfigDef("DefaultGroup", &cli.StringFlag{
+			Value: defaultGroup,
+			Usage: "Default \"group\" value for each job",
+		}),
+		NewConfigDef("DefaultOS", &cli.StringFlag{
+			Value: defaultOS,
+			Usage: "Default \"os\" value for each job",
+		}),
+		NewConfigDef("HardTimeout", &cli.DurationFlag{
+			Value: defaultHardTimeout,
+			Usage: "The outermost (maximum) timeout for a given job, at which time the job is cancelled",
+		}),
+		NewConfigDef("InitialSleep", &cli.DurationFlag{
+			Value: defaultInitialSleep,
+			Usage: "The time to sleep prior to opening log and starting job",
+		}),
+		NewConfigDef("LogTimeout", &cli.DurationFlag{
+			Value: defaultLogTimeout,
+			Usage: "The timeout for a job that's not outputting anything",
+		}),
+		NewConfigDef("ScriptUploadTimeout", &cli.DurationFlag{
+			Value: defaultScriptUploadTimeout,
+			Usage: "The timeout for the script upload step",
+		}),
+		NewConfigDef("StartupTimeout", &cli.DurationFlag{
+			Value: defaultStartupTimeout,
+			Usage: "The timeout for execution environment to be ready",
+		}),
+		NewConfigDef("MaxLogLength", &cli.IntFlag{
+			Value: defaultMaxLogLength,
+			Usage: "The maximum length of a log in bytes",
+		}),
+		NewConfigDef("JobBoardURL", &cli.StringFlag{
+			Usage: "The base URL for job-board used with http queue",
+		}),
+		NewConfigDef("TravisSite", &cli.StringFlag{
+			Usage: "Either 'org' or 'com', used for job-board",
+		}),
+		NewConfigDef("StateUpdatePoolSize", &cli.IntFlag{
+			Usage: "The pool size for state update workers",
+			Value: 3,
+		}),
+		NewConfigDef("LogPoolSize", &cli.IntFlag{
+			Usage: "The pool size for log workers",
+			Value: 3,
+		}),
+		NewConfigDef("RabbitMQSharding", &cli.BoolFlag{
+			Usage: "Enable sharding for the logs AMQP queue",
+		}),
+
+		// build script generator flags
+		NewConfigDef("BuildCacheFetchTimeout", &cli.DurationFlag{
+			Value: defaultBuildCacheFetchTimeout,
+		}),
+		NewConfigDef("BuildCachePushTimeout", &cli.DurationFlag{
+			Value: defaultBuildCachePushTimeout,
+		}),
+		NewConfigDef("BuildAptCache", &cli.StringFlag{}),
+		NewConfigDef("BuildNpmCache", &cli.StringFlag{}),
+		NewConfigDef("BuildParanoid", &cli.BoolFlag{}),
+		NewConfigDef("BuildFixResolvConf", &cli.BoolFlag{}),
+		NewConfigDef("BuildFixEtcHosts", &cli.BoolFlag{}),
+		NewConfigDef("BuildCacheType", &cli.StringFlag{}),
+		NewConfigDef("BuildCacheS3Scheme", &cli.StringFlag{}),
+		NewConfigDef("BuildCacheS3Region", &cli.StringFlag{}),
+		NewConfigDef("BuildCacheS3Bucket", &cli.StringFlag{}),
+		NewConfigDef("BuildCacheS3AccessKeyID", &cli.StringFlag{}),
+		NewConfigDef("BuildCacheS3SecretAccessKey", &cli.StringFlag{}),
+
+		NewConfigDef("BuildTraceEnabled", &cli.BoolFlag{
+			Usage: "Enable downloading build traces",
+		}),
+		NewConfigDef("BuildTraceS3Bucket", &cli.StringFlag{}),
+		NewConfigDef("BuildTraceS3KeyPrefix", &cli.StringFlag{}),
+		NewConfigDef("BuildTraceS3Region", &cli.StringFlag{}),
+
+		// non-config and special case flags
+		NewConfigDef("PayloadFilterExecutable", &cli.StringFlag{
+			Usage: "External executable which will be called to filter the json to be sent to the build script generator",
+		}),
+		NewConfigDef("SkipShutdownOnLogTimeout", &cli.BoolFlag{
+			Usage: "Special-case mode to aid with debugging timed out jobs",
+		}),
+		NewConfigDef("BuildAPIInsecureSkipVerify", &cli.BoolFlag{
+			Usage: "Skip build API TLS verification (useful for Enterprise and testing)",
+		}),
+		NewConfigDef("ProgressType", &cli.StringFlag{
+			Usage: "Report progress for supported backends (valid values \"text\" or unset)",
+		}),
+		NewConfigDef("remote-controller-addr", &cli.StringFlag{
+			Usage: "enable remote controller http api (and pprof) at address",
+		}),
+		NewConfigDef("remote-controller-auth", &cli.StringFlag{
+			Usage: "username:password for http api basic auth for remote controller",
+		}),
+		NewConfigDef("silence-metrics", &cli.BoolFlag{
+			Usage: "deprecated flag",
+		}),
+		NewConfigDef("log-metrics", &cli.BoolFlag{
+			Usage: "periodically print metrics to the stdout",
+		}),
+		NewConfigDef("echo-config", &cli.BoolFlag{
+			Usage: "echo parsed config and exit",
+		}),
+		NewConfigDef("list-backend-providers", &cli.BoolFlag{
+			Usage: "echo backend provider list and exit",
+		}),
+		NewConfigDef("update-images", &cli.BoolFlag{
+			Usage: "update images for LXD backend from job-board",
+		}),
+		NewConfigDef("debug", &cli.BoolFlag{
+			Usage: "set log level to debug",
+		}),
+		NewConfigDef("start-hook", &cli.StringFlag{
+			Usage: "executable to run just before starting",
+		}),
+		NewConfigDef("stop-hook", &cli.StringFlag{
+			Usage: "executable to run just before exiting",
+		}),
+		NewConfigDef("heartbeat-url", &cli.StringFlag{
+			Usage: "health check and/or supervisor check URL (expects response: {\"state\": \"(up|down)\"})",
+		}),
+		NewConfigDef("heartbeat-url-auth-token", &cli.StringFlag{
+			Usage: "auth token for health check and/or supervisor check URL (may be \"file://path/to/file\")",
+		}),
+		NewConfigDef("Infra", &cli.StringFlag{
+			Usage: "infra tag, e.g. gce or ec2",
+		}),
+		NewConfigDef("StackdriverTraceAccountJSON", &cli.StringFlag{
+			Usage: "file path or JSON to stackdriver trace on Google Cloud",
+		}),
+		NewConfigDef("StackdriverProjectID", &cli.StringFlag{
+			Usage: "google cloud project ID where where traces are exported and viewed",
+		}),
+		NewConfigDef("OpencensusTracingEnabled", &cli.BoolFlag{
+			Usage: "enable tracing for worker with google stackdriver client",
+		}),
+		NewConfigDef("OpencensusSamplingRate", &cli.IntFlag{
+			Usage: "sample rate for trace as an inverse fraction - for sample rate n, every nth event will be sampled",
+			Value: 1,
+		}),
+	}
+
+	// Flags is the list of all CLI flags accepted by travis-worker
+	Flags = defFlags(defs)
+)
+
+func twEnvVars(key string) string {
+	return strings.ToUpper(strings.Join(twEnvVarsSlice(key), ","))
+}
+
+func twEnvVarsSlice(key string) []string {
+	return []string{
+		fmt.Sprintf("TRAVIS_WORKER_%s", key),
+		key,
+	}
+}
+
+func init() {
+	wd, err := os.Getwd()
+	if err != nil {
+		return
+	}
+
+	defaultBaseDir = wd
+}
+
+func defFlags(defs []*ConfigDef) []cli.Flag {
+	f := []cli.Flag{}
+
+	for _, def := range defs {
+		f = append(f, def.Flag)
+	}
+
+	return f
+}
+
+type ConfigDef struct {
+	FieldName string
+	Name      string
+	EnvVar    string
+	Flag      cli.Flag
+	HasField  bool
+}
+
+func NewConfigDef(fieldName string, flag cli.Flag) *ConfigDef {
+	if fieldName == "" {
+		panic("empty field name")
+	}
+
+	var name string
+	if string(fieldName[0]) == strings.ToLower(string(fieldName[0])) {
+		name = fieldName
+	} else {
+		field, _ := configType.FieldByName(fieldName)
+		name = field.Tag.Get("config")
+	}
+
+	env := strings.ToUpper(strings.Replace(name, "-", "_", -1))
+
+	def := &ConfigDef{
+		FieldName: fieldName,
+		Name:      name,
+		EnvVar:    env,
+		HasField:  fieldName != name,
+	}
+
+	envPrefixed := twEnvVars(env)
+
+	if f, ok := flag.(*cli.BoolFlag); ok {
+		def.Flag, f.Name, f.EnvVar = f, name, envPrefixed
+		return def
+	} else if f, ok := flag.(*cli.StringFlag); ok {
+		def.Flag, f.Name, f.EnvVar = f, name, envPrefixed
+		return def
+	} else if f, ok := flag.(*cli.IntFlag); ok {
+		def.Flag, f.Name, f.EnvVar = f, name, envPrefixed
+		return def
+	} else if f, ok := flag.(*cli.DurationFlag); ok {
+		def.Flag, f.Name, f.EnvVar = f, name, envPrefixed
+		return def
+	} else {
+		return def
+	}
+}
+
+// Config contains all the configuration needed to run the worker.
+type Config struct {
+	ProviderName         string        `config:"provider-name"`
+	QueueType            string        `config:"queue-type"`
+	AmqpURI              string        `config:"amqp-uri"`
+	AmqpInsecure         bool          `config:"amqp-insecure"`
+	AmqpTlsCert          string        `config:"amqp-tls-cert"`
+	AmqpTlsCertPath      string        `config:"amqp-tls-cert-path"`
+	AmqpHeartbeat        time.Duration `config:"amqp-heartbeat"`
+	AmqpConsumerPriority int           `config:"amqp-consumer-priority"`
+	BaseDir              string        `config:"base-dir"`
+	PoolSize             int           `config:"pool-size"`
+	BuildAPIURI          string        `config:"build-api-uri"`
+	QueueName            string        `config:"queue-name"`
+	LibratoEmail         string        `config:"librato-email"`
+	LibratoToken         string        `config:"librato-token"`
+	LibratoSource        string        `config:"librato-source"`
+	LogsAmqpURI          string        `config:"logs-amqp-uri"`
+	LogsAmqpTlsCert      string        `config:"logs-amqp-tls-cert"`
+	LogsAmqpTlsCertPath  string        `config:"logs-amqp-tls-cert-path"`
+	SentryDSN            string        `config:"sentry-dsn"`
+	Hostname             string        `config:"hostname"`
+	DefaultLanguage      string        `config:"default-language"`
+	DefaultDist          string        `config:"default-dist"`
+	DefaultArch          string        `config:"default-arch"`
+	DefaultGroup         string        `config:"default-group"`
+	DefaultOS            string        `config:"default-os"`
+	JobBoardURL          string        `config:"job-board-url"`
+	TravisSite           string        `config:"travis-site"`
+	RabbitMQSharding     bool          `config:"rabbitmq-sharding"`
+
+	StateUpdatePoolSize int `config:"state-update-pool-size"`
+	LogPoolSize         int `config:"log-pool-size"`
+
+	FilePollingInterval      time.Duration `config:"file-polling-interval"`
+	HTTPPollingInterval      time.Duration `config:"http-polling-interval"`
+	HTTPRefreshClaimInterval time.Duration `config:"http-refresh-claim-interval"`
+
+	HardTimeout         time.Duration `config:"hard-timeout"`
+	InitialSleep        time.Duration `config:"initial-sleep"`
+	LogTimeout          time.Duration `config:"log-timeout"`
+	MaxLogLength        int           `config:"max-log-length"`
+	ScriptUploadTimeout time.Duration `config:"script-upload-timeout"`
+	StartupTimeout      time.Duration `config:"startup-timeout"`
+
+	BuildTraceEnabled     bool   `config:"build-trace-enabled"`
+	BuildTraceS3Bucket    string `config:"build-trace-s3-bucket"`
+	BuildTraceS3KeyPrefix string `config:"build-trace-s3-key-prefix"`
+	BuildTraceS3Region    string `config:"build-trace-s3-region"`
+
+	SentryHookErrors           bool `config:"sentry-hook-errors"`
+	BuildAPIInsecureSkipVerify bool `config:"build-api-insecure-skip-verify"`
+	SkipShutdownOnLogTimeout   bool `config:"skip-shutdown-on-log-timeout"`
+
+	// build script generator options
+	BuildCacheFetchTimeout time.Duration `config:"build-cache-fetch-timeout"`
+	BuildCachePushTimeout  time.Duration `config:"build-cache-push-timeout"`
+
+	BuildParanoid      bool `config:"build-paranoid"`
+	BuildFixResolvConf bool `config:"build-fix-resolv-conf"`
+	BuildFixEtcHosts   bool `config:"build-fix-etc-hosts"`
+
+	BuildAptCache               string `config:"build-apt-cache"`
+	BuildNpmCache               string `config:"build-npm-cache"`
+	BuildCacheType              string `config:"build-cache-type"`
+	BuildCacheS3Scheme          string `config:"build-cache-s3-scheme"`
+	BuildCacheS3Region          string `config:"build-cache-s3-region"`
+	BuildCacheS3Bucket          string `config:"build-cache-s3-bucket"`
+	BuildCacheS3AccessKeyID     string `config:"build-cache-s3-access-key-id"`
+	BuildCacheS3SecretAccessKey string `config:"build-cache-s3-secret-access-key"`
+
+	PayloadFilterExecutable     string `config:"payload-filter-executable"`
+	ProgressType                string `config:"progress-type"`
+	Infra                       string `config:"infra"`
+	StackdriverTraceAccountJSON string `config:"stackdriver-trace-account-json"`
+	StackdriverProjectID        string `config:"stackdriver-project-id"`
+	OpencensusTracingEnabled    bool   `config:"opencensus-tracing-enabled"`
+	OpencensusSamplingRate      int    `config:"opencensus-sampling-rate"`
+
+	ProviderConfig *ProviderConfig
+}
+
+// FromCLIContext creates a Config using a cli.Context by pulling configuration
+// from the flags in the context.
+func FromCLIContext(c *cli.Context) *Config {
+	cfg := &Config{}
+	cfgVal := reflect.ValueOf(cfg).Elem()
+
+	for _, def := range defs {
+		if !def.HasField {
+			continue
+		}
+
+		field := cfgVal.FieldByName(def.FieldName)
+
+		if _, ok := def.Flag.(*cli.BoolFlag); ok {
+			field.SetBool(c.Bool(def.Name))
+		} else if _, ok := def.Flag.(*cli.DurationFlag); ok {
+			field.Set(reflect.ValueOf(c.Duration(def.Name)))
+		} else if _, ok := def.Flag.(*cli.IntFlag); ok {
+			field.SetInt(int64(c.Int(def.Name)))
+		} else if _, ok := def.Flag.(*cli.StringFlag); ok {
+			field.SetString(c.String(def.Name))
+		}
+	}
+
+	cfg.ProviderConfig = ProviderConfigFromEnviron(cfg.ProviderName)
+
+	return cfg
+}
+
+// WriteEnvConfig writes the given configuration to out. The format of the
+// output is a list of environment variables settings suitable to be sourced
+// by a Bourne-like shell.
+func WriteEnvConfig(cfg *Config, out io.Writer) {
+	cfgMap := map[string]interface{}{}
+	cfgElem := reflect.ValueOf(cfg).Elem()
+
+	for _, def := range defs {
+		if !def.HasField {
+			continue
+		}
+
+		field := cfgElem.FieldByName(def.FieldName)
+		cfgMap[def.Name] = field.Interface()
+	}
+
+	sortedCfgMapKeys := []string{}
+
+	for key := range cfgMap {
+		sortedCfgMapKeys = append(sortedCfgMapKeys, key)
+	}
+
+	sort.Strings(sortedCfgMapKeys)
+
+	fmt.Fprintf(out, "# travis-worker env config generated %s\n", time.Now().UTC())
+	for _, key := range sortedCfgMapKeys {
+		envKey := fmt.Sprintf("TRAVIS_WORKER_%s", strings.ToUpper(strings.Replace(key, "-", "_", -1)))
+		fmt.Fprintf(out, "export %s=%q\n", envKey, fmt.Sprintf("%v", cfgMap[key]))
+	}
+	fmt.Fprintf(out, "\n# travis-worker provider config:\n")
+	cfg.ProviderConfig.Each(func(key, value string) {
+		envKey := strings.ToUpper(fmt.Sprintf("TRAVIS_WORKER_%s_%s", cfg.ProviderName, strings.Replace(key, "-", "_", -1)))
+		fmt.Fprintf(out, "export %s=%q\n", envKey, value)
+	})
+	fmt.Fprintf(out, "# end travis-worker env config\n")
+}

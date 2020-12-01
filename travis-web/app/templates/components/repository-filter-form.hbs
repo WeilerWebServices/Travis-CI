@@ -1,0 +1,14 @@
+<TravisForm as |form|>
+  <form.field
+    data-test-filter-field="true"
+    @icon="icon-filter"
+    @value={{this.query}}
+    @allowClear={{true}}
+    @onChange={{this.onSearch}}
+    as |field|
+  >
+    {{yield (hash
+      searchField=(component field.input onKeyUp=this.onSearch)
+    )}}
+  </form.field>
+</TravisForm>

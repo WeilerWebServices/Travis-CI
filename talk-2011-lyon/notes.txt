@@ -1,0 +1,8 @@
+- what some people said
+
+# testing tips
+when getting your project ready for ci and testing in general, things to remember
+  - ruby debug
+  - gem groups
+  - version constraints
+  - rake file

@@ -1,0 +1,30 @@
+<div class="message">
+  {{#if service_hooks.isSyncing}}
+    <p class="sync">
+      Synchronizing your data from GitHub
+    </p>
+  {{else}}
+    <p>
+      Last synchronized from GitHub: {{service_hooks.syncedAt}}
+      {{#view Ember.Button class="sync_now" target="parentView.service_hooks" action="sync"}}
+        Sync now
+      {{/view}}
+    </p>
+  {{/if}}
+</div>
+
+{{#collection tagName="ul" itemViewClass="Ember.View" itemClass="repository" contentBinding="service_hooks" isLoadedBinding="service_hooks.isLoaded"}}
+  <a {{bindAttr href="content.url"}} rel="nofollow">{{content.owner_name}}/{{content.name}}</a>
+  <p class="description">{{content.description}}</p>
+
+  <div class="controls">
+    <a {{bindAttr href="content.urlGithubAdmin"}} class="github-admin tool-tip" title="Github service hooks admin page"></a>
+    {{#view Ember.Button tagName="a" class="switch" classBinding="content.active" contentBinding="content" target="content" action="toggle"}}{{/view}}
+  </div>
+{{else}}
+  {{#if Travis.service_hooks.isLoaded}}
+    You do not seem to have any repositories that we could sync.
+  {{else}}
+    Loading ...
+  {{/if}}
+{{/collection}}

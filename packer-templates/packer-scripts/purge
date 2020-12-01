@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+main() {
+  set -o xtrace
+  shopt -s nullglob
+
+  if [[ "$(uname -m)" =~ ppc ]]; then
+    : "${PURGE_PACKAGE_DEFAULTS:=linux-headers,linux-source,chefdk}"
+  else
+    : "${PURGE_PACKAGE_DEFAULTS:=linux-headers,linux-source,chef,chefdk}"
+  fi
+  export DEBIAN_FRONTEND='noninteractive'
+
+  rm -rf /var/lib/apt/lists/* || echo "Suppressing exit $?"
+  __run_retry apt-get -y update
+
+  if [[ "${APT_GET_UPGRADE_DURING_CLEANUP}" ]]; then
+    __run_retry apt-get -y upgrade
+  fi
+
+  for pkg in ${PURGE_PACKAGE_DEFAULTS//,/ }; do
+    __run_retry __purge_packages "${pkg}"
+  done
+
+  if [[ "${CLEAN_DEV_PACKAGES}" ]]; then
+    __run_retry __purge_packages '-dev$'
+  fi
+
+  __run_retry __purge_from_manifest
+  __run_retry __mark_manual
+  __run_retry apt-get -y autoremove
+  __run_retry apt-get -y clean
+}
+
+__purge_from_manifest() {
+  if [[ -f /var/tmp/purge.txt ]]; then
+    grep -v '^#' /var/tmp/purge.txt | xargs apt-get -y purge
+  fi
+}
+
+__mark_manual() {
+  if [[ -f /var/tmp/packages.txt ]]; then
+    grep -v '^#' /var/tmp/packages.txt | xargs apt-mark manual
+  fi
+}
+
+__purge_packages() {
+  dpkg --list | awk '{ print $2 }' | grep -- "$1" |
+    grep -v -- "${2:-^$}" | xargs apt-get -y purge
+}
+
+__run_retry() {
+  local cmd=("${@}")
+
+  local i=0
+  while true; do
+    if [[ $i -gt 2 ]]; then
+      exit 86
+    fi
+
+    if "${cmd[@]}"; then
+      return
+    fi
+
+    i=$((i + 1))
+    sleep 30
+  done
+}
+
+main "${@}"

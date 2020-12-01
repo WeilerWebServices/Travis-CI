@@ -1,0 +1,57 @@
+@import "orders/nyancat";
+@import "vendor/tipsy";
+
+#orders {
+  section{
+    .stripe_logo {
+      float: right;
+      margin-right: 50px;
+    }
+    #stripe_error {
+      float: left;
+      color: #c00;
+      margin: 15px 0 0 0;
+    }
+  }
+}
+
+.nyancat-container {
+  position: relative;
+
+  &.on .audio {
+    background-position: -10px -70px !important;
+    border-color: #fafb0f !important;
+  }
+
+  .sidenote {
+    display: none;
+    top: auto;
+    bottom: 70px;
+    right: -180px;
+    padding-top: 5px;
+
+    &:after {
+      top: 40px;
+      left: -10px;
+    }
+    .note-1 {
+      display: block;
+    }
+    .note-2 {
+      display: none;
+    }
+  }
+  &:hover .sidenote.note-1 {
+    display: block;
+  }
+  &:hover .sidenote.note-2 {
+    display: none;
+  }
+  &.on:hover .sidenote.note-1 {
+    display: none;
+  }
+  &.on:hover .sidenote.note-2 {
+    display: block;
+  }
+}
+

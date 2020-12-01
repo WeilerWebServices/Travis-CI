@@ -1,0 +1,314 @@
+@import "home";
+@import "form";
+@import "orders";
+@import "profile";
+@import "imprint";
+@import "compass";
+@import "compass/utilities/general/clearfix";
+
+html, body {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  background-color: #fafafa;
+  z-index: -2;
+}
+body {
+  padding-top: 400px;
+  -webkit-text-size-adjust: none; /* dont mess my prefs */
+}
+
+#closed {
+  padding: 12em 0 13em 0;
+  margin-top: -400px;
+  text-align: center;
+  background-color: lightskyblue;
+
+  h1 {
+    font-size: 3em;
+    color: white;
+  }
+  p {
+    margin: auto auto;
+    max-width: 50em;
+    color: #444;
+  }
+  strong {
+    text-decoration: underline;
+  }
+}
+
+// required for IE
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+p, li, blockquote {
+  line-height: 140%;
+  margin: 15px 0 0 0;
+}
+ul {
+  margin: 15px 0 0 0;
+  padding: 0;
+  list-style-type: none;
+}
+blockquote {
+  font-size: 14px;
+}
+a {
+  color: #274798;
+}
+p sup, li sup {
+	position: relative;
+	top: -0.5em;
+	vertical-align: baseline;
+	line-height: 0;
+	font-size: 75%;
+}
+em {
+  background-color: yellow;
+  font-style: normal;
+}
+section {
+  margin-top: 20px;
+
+  h2 {
+    position: relative;
+    display: inline-block;
+    margin: 0 0 10px 0;
+    font-size: 36px;
+    font-weight: normal;
+  }
+  cite a {
+    color: inherit;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  sup {
+    font-size: 10px;
+  }
+}
+
+#wrap {
+  position: relative;
+  background: url(/images/background-header.png) repeat-x left top;
+}
+#page {
+  position: relative;
+  width: 960px;
+  margin: auto;
+}
+
+#top {
+  padding: 20px 0 15px;
+  background-color: #fff;
+
+  h1 {
+    display: inline-block;
+    margin: 0px;
+    a {
+      display: block;
+      width: 200px;
+      height: 64px;
+      background: url(/images/travis-ci.png) no-repeat;
+      overflow: hidden;
+      text-indent: -9999px;
+    }
+  }
+  h2 {
+    position: absolute;
+    margin: 0;
+    top: 50px;
+    right: 0;
+    color: #999;
+    font-weight: normal;
+    font-size: 17px;
+  }
+  ul {
+    position: absolute;
+    top: 20px;
+    right: 0;
+    margin: 0;
+
+    li {
+      float: left;
+      margin: 0 0 0 10px;
+      font-size: 13px;
+
+      a {
+        color: #999;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+#github {
+  position: absolute;
+  z-index: 100;
+  top: 0px;
+  right: 0px;
+  width: 130px;
+  height: 140px;
+  overflow: hidden;
+
+  a {
+    display: block;
+    width: 180px;
+    height: 19px;
+    margin: 37px 0 0 -10px;
+    padding: 3px 0;
+    border-top: 2px solid #EF9F4C;
+    border-bottom: 2px solid #EF9F4C;
+    background: #EF7600;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 19px;
+    letter-spacing: -1px;
+    text-shadow: 0 0 10px #522600;
+    @include transform(rotate(45deg));
+    @include box-shadow(rgba(0, 0, 0, 0.5) 1px 1px 10px, rgba(0, 0, 0, 0.07) 0 0 3px 1px inset);
+  }
+}
+
+.flash {
+  padding: 5px 8px;
+  border: 1px solid #ddd;
+  border-width: 0 0 1px 0;
+  text-align: center;
+
+  &.notice {
+    background-color: #cfc;
+  }
+  &.error, &.alert {
+    background-color: #fcc;
+  }
+  p {
+    margin: 0;
+  }
+}
+
+.application-error {
+  font-size: 16px;
+  background-color: #fcc;
+  font-weight: bold;
+  margin-left: 0px;
+  padding: 5px 8px;
+  border: 1px solid #ddd;
+  border-width: 0 0 1px 0;
+  color: #c00;
+}
+
+footer {
+  margin-top: 40px;
+  background-color: #f2f4f9;
+
+  div {
+    width: 880px;
+    height: 130px;
+    margin: 0 auto;
+    padding: 35px 0 0 0;
+    background: url(/images/footer.png) no-repeat 460px 35px;
+  }
+  h2 {
+    margin-top: 0;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  ul {
+    display: inline-block;
+    float: left;
+    margin: 0 40px 0 0;
+  }
+  li {
+    line-height: 160%;
+    font-size: 15px;
+    color: #999;
+    margin: 0;
+  }
+  a {
+    color: #89a;
+  }
+}
+// footer#suggestions {
+//   position: fixed;
+//   bottom: 0;
+//   width: 100%;
+//   height: 30px;
+//   margin: 0;
+//   border-top: 1px solid #CCC;
+//   background: #EEE;
+//   opacity: 0.75;
+//   font-size: 13px;
+//   text-align: right;
+//   @include background-image(linear-gradient(#f8f8f8 0%, #daDada 100%));
+//
+//   form {
+//     margin: 0 auto;
+//     padding: 4px 0;
+//     input[type=text] {
+//       width: 300px;
+//       height: 14px;
+//       margin-right: 47px;
+//       padding: 3px;
+//       border: 1px solid #AAA;
+//       @include border-radius(4px);
+//     }
+//   }
+// }
+
+#sociallinks {
+  .fb-like {
+    top: -3px;
+  }
+}
+
+.navigation {
+  float: right;
+}
+
+dl {
+  @include clearfix();
+  line-height: 24px;
+}
+dt {
+  float: left;
+  clear: left;
+  width: 60px;
+  font-size: 15px;
+  color: #999;
+}
+dd {
+  float: left;
+}
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+.clearfix {
+	display: inline-block;
+}
+html[xmlns] .clearfix {
+	display: block;
+}
+* html .clearfix {
+	height: 1%;
+}
+

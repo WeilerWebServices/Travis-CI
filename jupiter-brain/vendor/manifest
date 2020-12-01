@@ -1,0 +1,246 @@
+{
+	"version": 0,
+	"dependencies": [
+		{
+			"importpath": "github.com/Sirupsen/logrus",
+			"repository": "https://github.com/Sirupsen/logrus",
+			"vcs": "",
+			"revision": "3fc34d061b9c78a70db853c7cb6b0576b6d4f32d",
+			"branch": "HEAD"
+		},
+		{
+			"importpath": "github.com/braintree/manners",
+			"repository": "https://github.com/braintree/manners",
+			"vcs": "git",
+			"revision": "82a8879fc5fd0381fa8b2d8033b19bf255252088",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/certifi/gocertifi",
+			"repository": "https://github.com/certifi/gocertifi",
+			"vcs": "git",
+			"revision": "a61bf5eafa3aee233ec8043e9da052447e5463dd",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/codegangsta/cli",
+			"repository": "https://github.com/codegangsta/cli",
+			"vcs": "",
+			"revision": "2bcd11f863d540a1b190dc03b6c4f634c6ae91d4",
+			"branch": "HEAD"
+		},
+		{
+			"importpath": "github.com/codegangsta/negroni",
+			"repository": "https://github.com/codegangsta/negroni",
+			"vcs": "",
+			"revision": "c7477ad8e330bef55bf1ebe300cf8aa67c492d1b",
+			"branch": "HEAD"
+		},
+		{
+			"importpath": "github.com/davecgh/go-spew/spew",
+			"repository": "https://github.com/davecgh/go-spew",
+			"vcs": "git",
+			"revision": "5215b55f46b2b919f50a1df0eaa5886afe4e3b3d",
+			"branch": "master",
+			"path": "/spew",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/facebookgo/clock",
+			"repository": "https://github.com/facebookgo/clock",
+			"vcs": "git",
+			"revision": "600d898af40aa09a7a93ecb9265d87b0504b6f03",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/facebookgo/limitgroup",
+			"repository": "https://github.com/facebookgo/limitgroup",
+			"vcs": "git",
+			"revision": "6abd8d71ec01451d7f1929eacaa263bbe2935d05",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/facebookgo/muster",
+			"repository": "https://github.com/facebookgo/muster",
+			"vcs": "git",
+			"revision": "fd3d7953fd52354a74b9f6b3d70d0c9650c4ec2a",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/felixge/httpsnoop",
+			"repository": "https://github.com/felixge/httpsnoop",
+			"vcs": "git",
+			"revision": "eadd4fad6aac69ae62379194fe0219f3dbc80fd3",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/getsentry/raven-go",
+			"repository": "https://github.com/getsentry/raven-go",
+			"vcs": "git",
+			"revision": "3f7439d3e74d88e21d196ba20eb61a5a958bc118",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/go-sql-driver/mysql",
+			"repository": "https://github.com/go-sql-driver/mysql",
+			"vcs": "git",
+			"revision": "99ff426eb706cffe92ff3d058e168b278cabf7c7",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/google/uuid",
+			"repository": "https://github.com/google/uuid",
+			"vcs": "git",
+			"revision": "dec09d789f3dba190787f8b4454c7d3c936fed9e",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/gorilla/context",
+			"repository": "https://github.com/gorilla/context",
+			"vcs": "",
+			"revision": "215affda49addc4c8ef7e2534915df2c8c35c6cd",
+			"branch": "HEAD"
+		},
+		{
+			"importpath": "github.com/gorilla/mux",
+			"repository": "https://github.com/gorilla/mux",
+			"vcs": "git",
+			"revision": "e48e440e4c92e3251d812f8ce7858944dfa3331c",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/honeycombio/beeline-go",
+			"repository": "https://github.com/honeycombio/beeline-go",
+			"vcs": "git",
+			"revision": "6acc807d0ea48acf418285c0262d71272591326e",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/honeycombio/libhoney-go",
+			"repository": "https://github.com/honeycombio/libhoney-go",
+			"vcs": "git",
+			"revision": "741c87cf6e228e5c509705847b67a3245bc79b8b",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/jmoiron/sqlx",
+			"repository": "https://github.com/jmoiron/sqlx",
+			"vcs": "git",
+			"revision": "0dae4fefe7c0e190f7b5a78dac28a1c82cc8d849",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/julienschmidt/httprouter",
+			"repository": "https://github.com/julienschmidt/httprouter",
+			"vcs": "git",
+			"revision": "348b672cd90d8190f8240323e372ecd1e66b59dc",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/lib/pq",
+			"repository": "https://github.com/lib/pq",
+			"vcs": "",
+			"revision": "b269bd035a727d6c1081f76e7a239a1b00674c40",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/meatballhat/negroni-logrus",
+			"repository": "https://github.com/meatballhat/negroni-logrus",
+			"vcs": "",
+			"revision": "d5e114d7a445f7a3652cf807d3f83d5dceb8de26",
+			"branch": "HEAD"
+		},
+		{
+			"importpath": "github.com/mihasya/go-metrics-librato",
+			"repository": "https://github.com/mihasya/go-metrics-librato",
+			"vcs": "git",
+			"revision": "0ec8d5e8bf04a48fc5c96792bfd016b08afdabad",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/pborman/uuid",
+			"repository": "https://github.com/pborman/uuid",
+			"vcs": "",
+			"revision": "ca53cad383cad2479bbba7f7a1a05797ec1386e4",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/pkg/errors",
+			"repository": "https://github.com/pkg/errors",
+			"vcs": "git",
+			"revision": "17b591df37844cde689f4d5813e5cea0927d8dd2",
+			"branch": "HEAD",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/rcrowley/go-metrics",
+			"repository": "https://github.com/rcrowley/go-metrics",
+			"vcs": "git",
+			"revision": "ab2277b1c5d15c3cba104e9cbddbdfc622df5ad8",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/sony/gobreaker",
+			"repository": "https://github.com/sony/gobreaker",
+			"vcs": "",
+			"revision": "fbf121b75055635e23032f4421865db5414d1d17",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/stathat/go",
+			"repository": "https://github.com/stathat/go",
+			"vcs": "git",
+			"revision": "74669b9f388d9d788c97399a0824adbfee78400e",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/vmware/govmomi",
+			"repository": "https://github.com/vmware/govmomi",
+			"vcs": "git",
+			"revision": "961a09fd6c4f8bf243897667016172e794b42bca",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "goji.io",
+			"repository": "https://github.com/goji/goji",
+			"vcs": "git",
+			"revision": "0d89ff54b2c18c9c4ba530e32496aef902d3c6cd",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "google.golang.org/appengine/cloudsql",
+			"repository": "https://github.com/golang/appengine",
+			"vcs": "git",
+			"revision": "4216e58b9158e5f1c906f1aca75162a46a2ec88a",
+			"branch": "master",
+			"path": "/cloudsql",
+			"notests": true
+		},
+		{
+			"importpath": "gopkg.in/alexcesaro/statsd.v2",
+			"repository": "https://gopkg.in/alexcesaro/statsd.v2",
+			"vcs": "git",
+			"revision": "7fea3f0d2fab1ad973e641e51dba45443a311a90",
+			"branch": "master",
+			"notests": true
+		}
+	]
+}

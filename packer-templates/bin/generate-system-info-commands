@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+[
+  File.expand_path('../lib', __dir__),
+  File.expand_path('../cookbooks/lib', __dir__)
+].each do |libdir|
+  $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
+end
+
+require 'system_info_commands_generator'
+if $PROGRAM_NAME == __FILE__
+  exit SystemInfoCommandsGenerator.new(
+    argv: ARGV,
+    top: `git rev-parse --show-toplevel`.strip
+  ).generate!
+end

@@ -1,0 +1,110 @@
+GIT
+  remote: https://github.com/travis-ci/travis-config
+  revision: 0c5b76989c5da2b842e8ef02eb3082df09abe6c2
+  specs:
+    travis-config (1.1.2)
+      hashr (~> 2.0)
+
+GIT
+  remote: https://github.com/travis-ci/travis-sso
+  revision: c7f6f07c5ddca7a9e51241ed926c905feeaa2d83
+  specs:
+    travis-sso (0.0.1)
+      multi_json
+      rack
+      rotp
+      yubikey
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activemodel (5.2.1.1)
+      activesupport (= 5.2.1.1)
+    activerecord (5.2.1.1)
+      activemodel (= 5.2.1.1)
+      activesupport (= 5.2.1.1)
+      arel (>= 9.0)
+    activesupport (5.2.1.1)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+    addressable (2.5.2)
+      public_suffix (>= 2.0.2, < 4.0)
+    arel (9.0.0)
+    backports (3.11.4)
+    concurrent-ruby (1.1.3)
+    faraday (0.15.4)
+      multipart-post (>= 1.2, < 3)
+    ffi (1.9.25)
+    hashr (2.0.1)
+    i18n (1.1.1)
+      concurrent-ruby (~> 1.0)
+    listen (3.1.5)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
+    minitest (5.11.3)
+    multi_json (1.13.1)
+    multipart-post (2.0.0)
+    mustermann (1.0.3)
+    pg (1.1.3)
+    public_suffix (3.0.3)
+    puma (3.12.2)
+    rack (2.0.8)
+    rack-protection (2.0.4)
+      rack
+    rack-ssl (1.4.1)
+      rack
+    rb-fsevent (0.10.3)
+    rb-inotify (0.9.10)
+      ffi (>= 0.5.0, < 2)
+    redis (4.0.3)
+    rerun (0.13.0)
+      listen (~> 3.0)
+    rotp (4.0.2)
+      addressable (~> 2.5)
+    ruby_dep (1.5.0)
+    sentry-raven (2.7.4)
+      faraday (>= 0.7.6, < 1.0)
+    sinatra (2.0.4)
+      mustermann (~> 1.0)
+      rack (~> 2.0)
+      rack-protection (= 2.0.4)
+      tilt (~> 2.0)
+    sinatra-contrib (2.0.4)
+      activesupport (>= 4.0.0)
+      backports (>= 2.8.2)
+      multi_json
+      mustermann (~> 1.0)
+      rack-protection (= 2.0.4)
+      sinatra (= 2.0.4)
+      tilt (>= 1.3, < 3)
+    thread_safe (0.3.6)
+    tilt (2.0.8)
+    tzinfo (1.2.5)
+      thread_safe (~> 0.1)
+    yubikey (1.4.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  activerecord
+  addressable
+  pg
+  puma
+  rack-ssl
+  redis
+  rerun
+  sentry-raven
+  sinatra (>= 2.0.2)
+  sinatra-contrib
+  travis-config!
+  travis-sso!
+
+RUBY VERSION
+   ruby 2.3.4p301
+
+BUNDLED WITH
+   1.17.1

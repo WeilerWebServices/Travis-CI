@@ -1,0 +1,13 @@
+env: linux
+linux:
+  amqp:
+    host: host
+    port: port
+    username: username
+    password: password
+    virtual_host: vhost
+  vms:
+    provider: docker
+    count: 3
+  language_mappings:
+    haskell: jvm

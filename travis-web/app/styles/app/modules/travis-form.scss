@@ -1,0 +1,477 @@
+$travis-form-border-width: 4px;
+$travis-form-badge-radius: 9px;
+$select-multiple-spacing: 5px;
+
+@mixin makeFieldBorder($color) {
+  box-shadow: inset 0 0 1px 1px $color;
+}
+
+@mixin makeFocused() {
+  outline: none;
+  border-color: rgba($oxide-blue, 0.2);
+}
+
+.travis-form {
+
+  .travis-form__field {
+    position: relative;
+
+    .ember-power-select-selected-item {
+      white-space: nowrap;
+    }
+
+    &.env-branch-selector {
+      .ember-power-select-trigger {
+        padding-right: 64px !important;
+      }
+      .ember-power-select-selected-item {
+        margin-right: 8px;
+        border-right: none;
+      }
+      .ember-power-select-clear-btn {
+        right: 25px;
+        top: 50%;
+        font-size: 0;
+        border-radius: 3px;
+        padding: 3px 4px;
+        transform: translate(0, -50%);
+        background: $cement-grey;
+        color: #fff;
+        &:before {
+          content: 'clear';
+          font-size: 14px;
+          font-weight: 300;
+          line-height: 14px;
+        }
+        &:hover {
+          background: $oxide-blue;
+        }
+      }
+    }
+
+    .travis-form__field-badge {
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      margin-top: -$travis-form-badge-radius;
+      right: 0;
+      width: $travis-form-badge-radius * 2;
+      height: $travis-form-badge-radius * 2;
+      pointer-events: none;
+
+      transition: all 0.2s ease-in;
+    }
+
+    .travis-form__label {
+      color: $cement-grey;
+      display: block;
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size: 0.9em;
+      margin-bottom: 5px;
+
+      .travis-form__required-mark {
+        color: $brick-red;
+      }
+
+      .tooltip {
+        text-transform: none;
+      }
+
+    }
+
+    .travis-form__helper-text {
+      margin: -3px 0 6px 0;
+      color: $cement-grey;
+      font-size: 0.8em;
+    }
+
+    .travis-form__field-component {
+      display: block;
+      height: auto;
+      line-height: normal;
+      font-size: 1em;
+      border-radius: $travis-form-border-width * 2;
+      border: $travis-form-border-width solid transparent;
+      margin: -$travis-form-border-width;
+      color: $asphalt-grey;
+
+      &:not(.switch) {
+        width: calc(100% + #{$travis-form-border-width * 2});
+      }
+
+      &[disabled],
+      &.travis-form__field-component--disabled {
+        opacity: 0.5;
+        background-color: transparent;
+      }
+
+      .switch-inner {
+        margin-top: 5px;
+      }
+    }
+
+    &:not(.travis-form__field--without-frame) .travis-form__field-component {
+      padding: 8px 10px 9px;
+      @include makeFieldBorder(lighten($cement-grey, 20%));
+
+      transition: border-color 0.2s ease-in;
+
+      &:focus,
+      &:active {
+        @include makeFocused();
+      }
+
+      &.ember-power-select-multiple-trigger {
+        padding: $select-multiple-spacing 25px 0 $select-multiple-spacing;
+      }
+    }
+
+    .travis-form__field-checkbox {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      cursor: pointer;
+
+      input[type=checkbox] {
+        visibility: hidden;
+      }
+
+      .travis-form__field-checkbox-wrapper {
+        width: 16px;
+        height: 16px;
+        position: relative;
+        top: 1px;
+        margin-right: 12px;
+
+        input,
+        svg {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+        }
+
+        svg {
+          opacity: 0;
+          transition: opacity 0.1s ease-in;
+        }
+
+      }
+
+      &--checked {
+        .travis-form__field-checkbox-wrapper {
+          .travis-form__field-checkbox-image--checked {
+            opacity: 1;
+          }
+        }
+      }
+
+      &--unchecked {
+        .travis-form__field-checkbox-wrapper {
+          .travis-form__field-checkbox-image--unchecked {
+            opacity: 1;
+          }
+        }
+      }
+
+      &--disabled {
+        opacity: 0.5;
+      }
+
+    }
+
+    .travis-form__field--slider {
+
+      .travis-form__field--slider-input {
+        appearance: none;
+        width: 100%;
+        height: 3px;
+        background: #d3d3d3;
+        outline: none;
+        position: relative;
+        opacity: 0.7; 
+        transition: opacity .2s;
+
+        &:hover {
+          opacity: 1;
+        }
+
+        &::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+          background: $oxide-blue;
+          cursor: pointer;
+        }
+
+        &::-moz-range-thumb {
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+          background: $oxide-blue;
+          cursor: pointer;
+        }
+
+        span {
+          content: '';
+          left: 0;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          display: block;
+          position: absolute;
+          height: 100%;
+          width: 50%;
+          background: $oxide-blue;
+        }
+      }
+    }
+
+    .travis-form__icon {
+      display: none;
+      position: absolute;
+      top: 50%;
+      margin-top: -8px;
+      left: 8px;
+
+      svg {
+        height: 16px;
+      }
+
+    }
+
+    &.travis-form__field--with-icon {
+
+      .travis-form__icon {
+        display: block;
+      }
+
+      .travis-form__field-component {
+        padding-left: 30px;
+      }
+
+    }
+
+    .travis-form__clear {
+      position: absolute;
+      top: 50%;
+      margin-top: -$travis-form-badge-radius;
+      right: $travis-form-badge-radius;
+      width: $travis-form-badge-radius * 2;
+      height: $travis-form-badge-radius * 2;
+      font-size: $travis-form-badge-radius * 2;
+      color: #ffffff;
+      background-color: $dry-cement;
+      border-radius: $travis-form-badge-radius;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .travis-form__error-message {
+      margin-top: 5px;
+      color: $brick-red;
+      opacity: 0;
+
+      transition: opacity 0.2s ease-in;
+    }
+
+    &.travis-form__field--focused {
+
+      .travis-form__field-component {
+        @include makeFocused();
+      }
+
+    }
+
+    &.travis-form__field--error {
+
+      .travis-form__field-badge--error {
+        opacity: 1;
+        right: -$travis-form-badge-radius * 2 - 10px;
+      }
+
+      .travis-form__field-component {
+        @include makeFieldBorder($brick-red);
+
+      }
+
+      .travis-form__error-message {
+        opacity: 1;
+      }
+
+    }
+
+    &.travis-form__field--valid {
+
+      &:not(.travis-form__field--focused) {
+
+        .travis-form__field-badge--valid {
+          opacity: 1;
+          right: -$travis-form-badge-radius * 2 - 10px;
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+@media screen and (max-width: 860px) {
+
+  .travis-form {
+
+    .travis-form__field {
+
+      &.travis-form__field--valid:not(.travis-form__field--focused),
+      &.travis-form__field--error {
+
+        .travis-form__field-badge {
+          bottom: 32px;
+          top: auto;
+          right: 5px;
+          background-color: white;
+        }
+
+        .travis-form__error-message {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+.ember-power-select-selected-item {
+  margin-left: 0;
+  margin-right: 8px;
+}
+
+.ember-power-select-status-icon {
+  right: 10px;
+}
+
+.ember-power-select-search {
+  padding: 5px 10px;
+}
+
+.ember-power-select-search-input {
+  padding: 2px 10px;
+  border: none;
+  border-radius: 4px;
+  @include makeFieldBorder(lighten($cement-grey, 20%));
+
+  &:focus {
+    outline: none;
+    border: none;
+    border-radius: 4px;
+    @include makeFieldBorder(lighten($cement-grey, 20%));
+  }
+
+  &::placeholder {
+    color: #cccccc;
+    font-weight: 100;
+  }
+
+}
+
+.ember-power-select-dropdown {
+  border-radius: $travis-form-border-width * 2;
+  border: $travis-form-border-width solid transparent !important;
+  border-top: 1px solid $pebble-grey !important;
+  margin: -$travis-form-border-width;
+  transform: translate(4px, -10px);
+  opacity: 0;
+
+  transition: all 0.2s ease-in;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow:
+      inset 0px -2px 1px -1px lighten($cement-grey, 20%),
+      inset 2px 0px 1px -1px lighten($cement-grey, 20%),
+      inset -2px 0px 1px -1px lighten($cement-grey, 20%);
+  }
+
+  &.ember-basic-dropdown--transitioned-in {
+    border-color: rgba($oxide-blue, 0.2) !important;
+    opacity: 1;
+    transform: translate(4px, -3px);
+  }
+
+}
+
+.ember-power-select-option {
+  line-height: normal;
+  padding: 5px 10px;
+
+  &[aria-selected="true"] {
+    background-color: $pebble-grey;
+  }
+
+  &[aria-current="true"] {
+    background-color: $oxide-blue;
+  }
+
+  &--search-message,
+  &--loading-message,
+  &--no-matches-message {
+    margin-bottom: 7px;
+    margin-left: 8px;
+    color: $cement-grey;
+    cursor: default;
+  }
+}
+
+.ember-power-select-multiple {
+
+  &-option {
+    margin: 0 $select-multiple-spacing $select-multiple-spacing 0;
+    border: none;
+    color: $oxide-blue;
+    background-color: lighten($oxide-blue, 45%);
+    font-size: 1.1em;
+    border-radius: 2px;
+    padding: 3px 6px;
+
+  }
+
+  &-remove-btn {
+    font-size: 1.2em;
+    padding: 0;
+    margin: 0;
+    line-height: 0;
+    vertical-align: middle;
+
+    &:not(:hover) {
+      opacity: 1;
+    }
+
+  }
+
+}
+
+.ember-power-select-trigger-multiple-input {
+  margin: 5px 3px 4px 3px;
+  font-size: 1.1em;
+  max-width: calc(100% - 25px);
+}

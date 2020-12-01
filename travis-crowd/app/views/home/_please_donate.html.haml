@@ -1,0 +1,156 @@
+%section#please-donate.paper
+  #results.handwritten
+    To date #{results[:users]} people + #{results[:companies]} companies
+    have donated
+    %em= number_to_currency(results[:total])
+    in total.
+    This puts a huge :D on our face. We love you folks.
+
+  %h2.ribbon Please donate!
+  %p
+    We figured donating to a fun project should be more fun than just fun. So we <i>made</i> it fun :)
+  %p
+    %strong What you will get?
+    We've got some
+    %a{href: '#stickers'} awesome stickers
+    hot off the press as well as a bunch of
+    %a{href: '#ringtones'} ringtones and sounds
+    from  Yehuda, Aaron, Jose and Jon. And how about a virtual cup of tea with Josh and Sven on Skype or
+    even a one hour remote pairing session with one of our fantastic volunteers<sup>1</sup>!
+  %p
+    %strong What we'll use the money for?
+    We are going to make Travis CI better (see <a href="#future-plans">some of the features</a> we have in the pipeline) and
+    we are going to build Travis CI pro<sup>2</sup>.
+  %p
+    You can get donation packages in two flavors: as one-off payments or monthly subscriptions:
+  .switch
+    %label.on{for: 'type_package', value: 'packages'} Single payment
+    %label.last{for: 'type_subscription', value: 'subscriptions'} Subscription
+
+  #packages
+    %h3 Packages
+    %ul.packages.clearfix
+      %li.huge
+        %h4
+          Huge
+          .price-tag
+            = number_to_currency Package.price(:huge)
+        %p All the stuff from the Big plan.
+        %p
+          But with $200 credit for your future Travis CI pro account
+          %sup> 2
+          \.
+        %p
+          And 1 hour remote pairing or support with one of our volunteers
+          %sup> 1
+          \.
+        = link_to 'Donate', new_package_path(package: 'huge')
+        = stats_for(:huge, :donor)
+      %li.big
+        %h4
+          Big
+          .price-tag
+            = number_to_currency Package.price(:big)
+        %p All the stuff from the Medium plan.
+        %p
+          Plus: $50 credit for your future Travis CI pro account
+          %sup> 2
+          \.
+        %p And a skype cup of tea with Josh &amp; Sven.
+        = link_to 'Donate', new_package_path(package: 'big')
+        = stats_for(:big, :donor)
+      %li.medium
+        %h4
+          Medium
+          .price-tag
+            = number_to_currency Package.price(:medium)
+        %p All the stuff from the Small plan with all the stickers.
+        %p And you get on the waiting list for Travis CI pro<sup>2</sup> beta access.
+        = link_to 'Donate', new_package_path(package: 'medium')
+        = stats_for(:medium, :donor)
+      %li.small
+        %h4
+          Small
+          .price-tag
+            = number_to_currency Package.price(:small)
+        %p 3 stickers, access to ringtones &amp; sounds.
+        %p Plus a personal thank you from our team.
+        = link_to 'Donate', new_package_path(package: 'small')
+        = stats_for(:small, :donor)
+      %li.tiny.last
+        %h4
+          Tiny
+          .price-tag
+            = number_to_currency Package.price(:tiny)
+        %p A cool Travis CI sticker and access to ringtones &amp; sounds.
+        = link_to 'Donate', new_package_path(package: 'tiny')
+        = stats_for(:tiny, :donor)
+      -# %li.custom.last
+      -#   %h4 Every donation welcome:
+      -#   = link_to 'Custom', new_package_path(package: 'nano')
+
+  #subscriptions
+    %h3 Subscriptions
+    %ul.packages.clearfix
+      %li.medium
+        %h4
+          Big
+          .price-tag
+            = number_to_currency Package.price(:big, true)
+        %p All the stuff from the Medium plan with all the Travis CI stickers.
+        %p And you get on the waiting list for Travis CI pro<sup>2</sup> beta access.
+        = link_to 'Donate', new_subscription_path(package: 'big')
+        = stats_for(:big, :subscriber)
+      %li.small
+        %h4
+          Medium
+          .price-tag
+            = number_to_currency Package.price(:medium, true)
+        %p 3 stickers, access to ringtones &amp; sounds.
+        %p Plus a personal thank you from our team.
+        = link_to 'Donate', new_subscription_path(package: 'medium')
+        = stats_for(:medium, :subscriber)
+      %li.tiny
+        %h4
+          Small
+          .price-tag
+            = number_to_currency Package.price(:small, true)
+        %p A cool Travis CI sticker and access to ringtones &amp; sounds.
+        = link_to 'Donate', new_subscription_path(package: 'small')
+        = stats_for(:small, :subscriber)
+
+  %p
+    Just want to donate something small?
+    = link_to("Donate #{number_to_currency Package.price(:nano)}", new_package_path(package: 'nano')) + ','.html_safe
+    each and every donation is welcome!
+
+  %ul.footnotes
+    %li
+      %sup 1
+      :markdown
+        [Josh Kalderimis](https://github.com/joshk),
+        [Mathias Meyer](https://github.com/mattmatt),
+        [Konstantin Haase](https://github.com/rkh),
+        [Sven Fuchs](https://github.com/svenfuchs),
+        [Evan Phoenix](https://github.com/evanphx),
+        [Brian Ford](https://github.com/brixen),
+        [Steve Klabnik](https://github.com/steveklabnik),
+        [Erik Michael-Ober](https://github.com/sferik),
+        [Santiago Pastorino](https://github.com/spastorino),
+        [Xavier Noria](https://github.com/fxn),
+        [Jon Leighton](https://github.com/jonleighton),
+        [José Valim](https://github.com/josevalim),
+        [Aaron Patterson](https://github.com/tenderlove),
+        [Yehuda Katz](https://github.com/wycats).
+        Spots are limited. Wanna support us and get on this list?
+        Drop us a [note](#contact)
+    %li
+      %sup 2
+      :markdown
+        "Travis CI pro" is the working title for the hosted service for private builds
+        that we are going to provide as soon as possible (and which we have founded a
+        company for, see the [FAQ](#faq-who-are-you) for more info. We will book credits
+        for your future account if you donate one of the bigger packages.
+
+  .sidenote.left.handwritten
+    Please consider these so we can make Travis CI better with your help.

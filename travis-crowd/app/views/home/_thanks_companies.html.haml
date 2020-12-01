@@ -1,0 +1,23 @@
+%section#thanks-companies.paper
+  %h2 Thank you, companies!
+  %div.tape
+
+  .pagination
+    = render partial: 'home/pagination', locals: { see_all: false }
+
+  %ul.sponsors
+
+  %ul.footnotes
+    %li
+      %sup 1
+      Your company logo here? Review the
+      <a href="#" class="toggle">company packages</a>
+      below and see our detailled
+      <a href="/company_packages">company package plans</a>.
+    %li
+      %sup 2
+      This list is randomized. Use the pagination above or review
+      %a{href: '/sponsors'} all of our sponsors here.
+
+  .sidenote.left.handwritten
+    Don't you also think these folks are extremely cool for helping us? Check them out!

@@ -1,0 +1,21 @@
+{
+  "name": "Scheduler Enqueued Total",
+  "type": "line",
+  "streams": [
+    {
+      "metric": "enqueue.total",
+      "type": "gauge",
+      "source": "*",
+      "group_function": "sum",
+      "summary_function": "sum",
+      "split_axis": false
+    },
+    {
+      "metric": "heroku.logs.releases",
+      "type": "annotation",
+      "source": "*",
+      "split_axis": false
+    }
+  ],
+  "thresholds": null
+}

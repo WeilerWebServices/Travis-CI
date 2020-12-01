@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o xtrace
+
+main() {
+  : "${PACKER_ENV_DIR:=/.packer-env}"
+  : "${GIT_META_DIR:=/var/tmp/git-meta}"
+
+  mkdir -p "${PACKER_ENV_DIR}"
+
+  for var in $(env | grep -E '^(PACKER|TRAVIS)' | awk -F= '{ print $1 }'); do
+    eval "echo \$$var" >"${PACKER_ENV_DIR}/$var"
+  done
+
+  if [[ -f "${GIT_META_DIR}/packer-templates-branch" ]]; then
+    cp -v \
+      "${GIT_META_DIR}/packer-templates-branch" \
+      "${PACKER_ENV_DIR}/PACKER_TEMPLATES_BRANCH"
+  fi
+
+  if [[ -f "${GIT_META_DIR}/packer-templates-sha" ]]; then
+    cp -v \
+      "${GIT_META_DIR}/packer-templates-sha" \
+      "${PACKER_ENV_DIR}/PACKER_TEMPLATES_SHA"
+  fi
+}
+
+main "$@"

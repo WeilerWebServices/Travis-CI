@@ -1,0 +1,102 @@
+$: << 'lib'
+
+require 'travis/assets'
+require 'compass'
+require 'rake-pipeline-web-filters'
+require 'rake-pipeline-web-filters/helpers'
+
+root = project.root
+version = Travis::Assets.version
+
+Compass.add_configuration({:project_path => root.to_s}, 'implied')
+
+register :erb,    Travis::Assets::Filters::Tilt
+register :hjs,    Travis::Assets::Filters::Handlebars
+register :coffee, Rake::Pipeline::Web::Filters::CoffeeScriptFilter
+register :scss,   Rake::Pipeline::Web::Filters::SassFilter
+
+tmpdir 'tmp'
+output "public/#{version}"
+
+paths = Travis::Assets.paths('javascripts')
+
+input 'assets/javascripts', "{#{paths.join(',')}}" do
+  paths.map! { |path| path.gsub(/.hjs|.coffee/, '') }
+  concat paths, 'javascripts/application.js'
+end
+
+# TODO: Maybe make a mobile manifest?
+# The goal is to eventually bake the mobile and full site together.
+# --Henrik Hodne, May 16th, 2012
+mobile_paths = %w(
+  vendor/jquery-1.7.js
+  vendor/jquery.timeago.js
+  vendor/jquery.cookie.js
+  vendor/jquery.tipsy.js
+  vendor/ember-0.9.7.1.js
+  vendor/sproutcore-datastore.js
+  vendor/sproutcore-2.0/**/*.js*
+  vendor/ansiparse.js
+  vendor/highcharts.js
+  vendor/pusher-1.12.min.js
+  vendor/i18n.js
+  mobile.js
+  lib/**/*.js
+  app/helpers/**/*.js*
+  app/models/**/*.js*
+  mobile/**/*.js*
+)
+
+
+mobile_paths.map! do |path|
+  base = Travis::Assets.root.join('assets').join('javascripts')
+  paths = Dir[base.join(path).to_s]
+  paths.map { |path| path.gsub("#{base}/", '') }
+end
+
+mobile_paths.flatten!
+
+input 'assets/javascripts', "{#{mobile_paths.join(',')}}" do
+  mobile_paths.map! { |path| path.gsub(/.hjs|.coffee/, '') }
+  concat mobile_paths, 'javascripts/mobile.js'
+end
+
+input 'assets/javascripts', 'jasmine/**/*.js' do
+  concat 'javascripts/jasmine.js'
+end
+
+input 'assets/javascripts', 'pro.js*' do
+  concat 'javascripts/pro.js'
+end
+
+input 'assets/stylesheets', 'application.css*' do
+  concat 'stylesheets/application.css'
+end
+
+input 'assets/stylesheets', 'mobile.css*' do
+  concat 'stylesheets/mobile.css'
+end
+
+input 'assets/stylesheets', 'jasmine.css*' do
+  concat 'stylesheets/jasmine.css'
+end
+
+input 'assets/stylesheets', 'pro.css*' do
+  concat 'stylesheets/pro.css'
+end
+
+input 'assets/javascripts', 'pro/vat.js' do
+  concat 'javascripts/pro/vat.js'
+end
+
+# how to use the copy filter with binary data?
+# input 'assets/images' do
+#   copy "#{version}/images"
+# end
+
+# root   = Pathname.new(File.dirname(__FILE__))
+source = root.join('assets')
+target = root.join("public/#{Travis::Assets.version}")
+
+`mkdir -p #{target}`
+`cp -r #{source.join('images')} #{target}`

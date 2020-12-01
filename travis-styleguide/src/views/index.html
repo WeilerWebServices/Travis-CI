@@ -1,0 +1,51 @@
+---
+title: Overview | Travis CI Styles
+fabricator: true
+---
+
+<h1>Travis CI Styles</h1>
+<h2>Overview</h2>
+
+<p>Travis CI Styles for your viewing pleasure.</p>
+
+<!-- <h2>Usage</h2>
+
+<p>Start by adding the following files to your page:</p>
+
+<pre class="language-markup"><code class="language-markup">&lt;link rel=&quot;stylesheet&quot; href=&quot;assets/toolkit/styles/toolkit.css&quot;&gt;</code></pre>
+
+<pre class="language-markup"><code class="language-markup">&lt;script src=&quot;assets/toolkit/scripts/toolkit.js&quot;&gt;&lt;/script&gt;</code></pre> -->
+
+<h2>Naming methodologies</h2>
+<p>BEM anyone?</p>
+
+<h2>Colors</h2>
+
+{{#each toolkit.colors}}
+	<div class="f-color-chips">
+	{{#each this}}
+		<div class="f-color-chip">
+			<div class="f-color-chip__name">${{@key}}</div>
+			<div class="f-color-chip__color">{{this}}</div>
+		</div>
+	{{/each}}
+	</div>
+{{/each}}
+
+<h2>Font sizes</h2>
+{{#each toolkit.fontsizes}}
+  <div style="font-size:{{this}}">
+    <div class=""><strong>${{@key}}</strong> <span>{{this}}</span></div>
+  </div>
+{{/each}}
+
+<h2>Icons</h2>
+<ul>
+{{#each icons.icons}}
+  <li><span class="icon-{{@key}}"></span>{{@key}}</li>
+{{/each}}
+</ul>
+
+
+<h2>Grid</h2>
+<p>Foundation grid</p>

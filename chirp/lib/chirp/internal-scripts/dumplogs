@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
+main() {
+  shopt -s nullglob
+
+  for f in "${1}"/*.log; do
+    echo "---> Dumping '${f}'"
+    cat "${f}"
+  done
+}
+
+main "$@"

@@ -1,0 +1,19 @@
+language: ruby
+
+rvm: 2.2.2
+
+sudo: false
+
+addons:
+  apt:
+    sources:
+    - chef-current-precise
+    packages:
+    - chefdk
+
+install:
+- gem install rubocop
+
+script:
+- rubocop
+- foodcritic -t '~FC022' .

@@ -1,0 +1,27 @@
+= render partial: 'blurb'
+= render partial: 'please_donate'
+= render partial: 'rails_core'
+= render partial: 'thanks_companies'
+= render partial: 'company_packages'
+= render partial: 'thanks_folks'
+= render partial: 'testimonials'
+= render partial: 'future_plans'
+= render partial: 'stickers'
+= render partial: 'ringtones'
+= render partial: 'faq'
+= render partial: 'contact'
+
+
+#fb-root
+
+:javascript
+  (function(d, s) {
+    var js, fjs = d.getElementsByTagName(s)[0], load = function(url, id) {
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.src = url; js.id = id;
+      fjs.parentNode.insertBefore(js, fjs);
+    };
+    load('//connect.facebook.net/en_US/all.js#xfbml=1', 'fbjssdk');
+    load('https://apis.google.com/js/plusone.js', 'gplus1js');
+    load('//platform.twitter.com/widgets.js', 'tweetjs');
+  }(document, 'script'));

@@ -1,0 +1,77 @@
+#sponsors {
+  section {
+    font-size: 14px;
+
+    #platinum {
+      li {
+        height: 220px;
+        padding-left: 230px;
+        & > a {
+          width: 210px;
+          height: 210px;
+        }
+      }
+    }
+
+    #gold {
+      li {
+        height: 140px;
+        padding-left: 230px;
+        & > a {
+          width: 205px;
+          height: 130px;
+        }
+      }
+    }
+
+    #silver {
+      li {
+        height: 70px;
+        padding-left: 230px;
+        padding-right: 5px;
+        & > a {
+          width: 205px;
+          height: 60px;
+        }
+      }
+
+      li.saucelabs {
+        height: 120px;
+      }
+    }
+
+    #code, #workers, #services, #special-thanks {
+      li {
+        height: 50px;
+        padding-left: 160px;
+        & > a {
+          width: 140px;
+          height: 40px;
+        }
+      }
+    }
+
+    h3 {
+      font-size: 18px;
+    }
+
+    li {
+      position: relative;
+      margin-top: 15px;
+
+      & > a {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0px;
+        border: 1px solid #ddd;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        @include border-radius(4px);
+        img {
+          @include border-radius(4px);
+        }
+      }
+    }
+  }
+}

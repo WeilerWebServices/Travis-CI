@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+$stdout.sync = true
+
+$LOAD_PATH << 'lib'
+
+require 'optparse'
+require 'travis/hub'
+require 'travis/hub/amqp'
+
+def options_parser(options)
+  options[:retries] = 3
+
+  OptionParser.new do |o|
+    o.on('-n', '--number NUMBER', 'Worker number') do |number|
+      options[:number] = number[/\d+/].to_i
+    end
+
+    o.on('-c', '--count COUNT', 'Workers count') do |count|
+      options[:count] = count[/\d+/].to_i
+    end
+  end
+end
+
+options = {}
+options_parser(options).parse!
+mode = ARGV.shift || :solo
+
+Travis::Hub::Amqp.new(mode.to_sym, options).run

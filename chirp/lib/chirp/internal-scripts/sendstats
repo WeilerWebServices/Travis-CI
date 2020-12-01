@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -o errexit
+
+main() {
+  [[ "${CHIRP_SENDSTATS_DISABLED}" ]] && {
+    echo "Disabled!"
+    exit 0
+  }
+
+  [[ "${HONEYCOMB_WRITEKEY}" ]] || {
+    echo "Missing \$HONEYCOMB_WRITEKEY"
+    exit 1
+  }
+
+  [[ "${HONEYCOMB_DATASET_URL}" ]] || {
+    echo "Missing \$HONEYCOMB_DATASET_URL"
+    exit 1
+  }
+
+  [[ -f "${CHIRP_SUMMARY_OUTPUT}" ]] || {
+    echo "Missing \$CHIRP_SUMMARY_OUTPUT file"
+    exit 1
+  }
+
+  : "${CHIRP_CURL_EXE:=curl}"
+
+  set +o xtrace
+  "${CHIRP_CURL_EXE}" -sSL \
+    -X POST \
+    --data-binary @"${CHIRP_SUMMARY_OUTPUT}" \
+    -H "X-Honeycomb-Team: ${HONEYCOMB_WRITEKEY}" \
+    "${HONEYCOMB_DATASET_URL}"
+}
+
+main "${@}"

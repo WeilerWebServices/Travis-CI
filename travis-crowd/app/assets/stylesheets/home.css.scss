@@ -1,0 +1,324 @@
+@import "compass";
+@import "fonts";
+@import "home/blurb";
+@import "home/please_donate";
+@import "home/rails_core";
+@import "home/thanks_companies";
+@import "home/company_packages";
+@import "home/thanks_folks";
+@import "home/testimonials";
+@import "home/future_plans";
+@import "home/ringtones";
+@import "home/faq";
+@import "home/animations";
+@import "home/sponsors";
+@import "home/sponsoring_plans";
+@import "home/sponsoring_sizes";
+
+#home #wrap {
+  background-image: url(/images/background-header-home.png);
+  overflow: hidden;
+  min-width: 960px;
+}
+
+.paper {
+  position: relative;
+  width: 880px;
+  margin-top: 40px;
+  padding: 30px 40px;
+  background-color: #fff;
+  @include box-shadow(rgba(0, 0, 0, 0.1) 0px 0px 1px inset);
+
+  /* curly paper shaddows */
+  &:before, &:after {
+    content: ' ';
+    position: absolute;
+    z-index: -1;
+    width: 40%;
+    height: 10px;
+    left: 12px;
+    bottom: 17px;
+    @include transform(skew(-5deg) rotate(-5deg));
+    @include box-shadow(rgba(0, 0, 0, 0.2) 0px 6px 12px);
+  }
+  &:after {
+    left: auto;
+    right: 12px;
+    @include transform(skew(5deg) rotate(5deg));
+  }
+
+  /* sticky tape */
+  & h2+*:before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 400px;
+    width: 130px;
+    height: 35px;
+    background-color: #eed;
+    opacity: 0.4;
+    border: dashed rgba(0, 0, 0, 0.1);
+    border-width: 0 1px;
+    @include box-shadow(#ccc 0px 0px 1px);
+  }
+  &:nth-child(odd) h2+*:before {
+    @include transform(rotate(2deg) skew(0,0) translate(0%,-5px));
+  }
+  &:nth-child(even) h2+*:before {
+    @include transform(rotate(-2deg) skew(0,0) translate(0%,-5px));
+  }
+  /* ribbon */
+  /* & h2:before {
+    content: ' ';
+    position: absolute;
+    display: block;
+    margin-top: -5px;
+    padding: 5px 0;
+    left: -60px;
+    width: 40px;
+    background-color: #fffa93;
+  }
+  & h2:after {
+    content: ' ';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: -60px;
+    bottom: -15px;
+    border-width: 5px 10px;
+    border-style: solid;
+    border-color: #e1dd97 #e1dd97 transparent transparent;
+  }*/
+}
+
+.packages {
+  ul {
+    margin-top: 40px;
+  }
+  li {
+    position: relative;
+    float: left;
+    width: 158px;
+    margin: 20px 20px 0 0;
+    padding-top: 35px;
+    padding-bottom: 5px;
+    background-color: #f2f4f9;
+    border: 1px solid #ddd;
+    @include border-radius(8px);
+    @include box-shadow(#ddd 0px 0px 5px);
+    font-size: 14px;
+
+    &.last {
+      margin-right: 0;
+    }
+
+    h4 {
+      position: absolute;
+      overflow: hidden;
+      display: block;
+      top: 0;
+      width: 100%;
+      height: 40px;
+      margin: 0;
+      padding: 15px 0;
+      text-align: center;
+      font-size: 20px;
+      color: #333;
+      // text-shadow: 2px 2px 0px #eee;
+      .price-tag {
+        position: absolute;
+        top: 13px;
+        right: -26px;
+        width: 100px;
+        height: 20px;
+        background-color: #ff6d00;
+        text-align: center;
+        font-size: 13px;
+        font-weight: bold;
+        color: white;
+        text-shadow: 2px 2px 1px #666;
+        @include rotate(45deg);
+      }
+    }
+    p:nth-child(2) {
+      padding-top: 15px;
+      border-top: 1px solid #ddd;
+    }
+    .stats {
+      position: absolute;
+      bottom: -25px;
+      width: 144px;
+      text-align: center;
+      color: #999;
+      font-size:13px;
+
+      span {
+        display: inline-block;
+        padding: 0 6px;
+        background-color: #FFF780;
+        @include border-radius(12px);
+      }
+    }
+
+    p {
+      padding: 0 10px;
+    }
+  }
+  a {
+    display: block;
+    width: 148px;
+    height: 40px;
+    margin: 15px 0 0 5px;
+    border: 0;
+    text-align: center;
+    line-height: 37px;
+    font-size: 16px;
+    text-decoration: none;
+    color: white;
+    text-shadow: 2px 2px 0px #666;
+    cursor: hand;
+    @include border-radius(6px);
+    background-color: #19A509;
+    @include background-image(linear-gradient(#3f9c33 0%, #348629 100%));
+	
+	
+	&.sold_out {
+	  @include background-image(linear-gradient(#999 0%, #888 100%));
+      &:hover {
+        @include background-image(linear-gradient(#999 0%, #888 100%));
+      }
+	}
+
+    &:hover {
+      @include background-image(linear-gradient(#1CBE0A 0%, #158F07 100%));
+    }
+  }
+}
+
+.sidenote {
+  position: absolute;
+  display: none;
+  top: 210px;
+  width: 140px;
+  font-size: 16px;
+
+  &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    height: 50px;
+    width: 50px;
+    background: url("/images/handwritten-arrow.png") no-repeat;
+  }
+  &.left {
+    left: -165px;
+    padding-top: 50px;
+    text-align: right;
+    @include rotate(-10deg);
+  }
+  &.left:after {
+    top: 0px;
+    right: 0px;
+    width: 54px;
+    height: 42px;
+    @include rotate(-60deg);
+  }
+  &.right {
+    right: -165px;
+    @include rotate(15deg);
+  }
+  &.right:after {
+    top: 80px;
+    left: 10px;
+    width: 54px;
+    height: 42px;
+    @include rotate(100deg);
+  }
+}
+section:hover .sidenote {
+  display: block;
+}
+
+.pagination {
+  position: absolute;
+  top: 46px;
+  right: 35px;
+  font-size: 14px;
+  color: #666;
+
+  span.first {
+    display: none;
+  }
+  &.first_page span.first {
+    display: inline-block;
+  }
+  &.first_page a.first {
+    display: none;
+  }
+  span.previous {
+    display: none;
+  }
+  &.first_page span.previous {
+    display: inline-block;
+  }
+  &.first_page a.previous {
+    display: none;
+  }
+  span.next {
+    display: none;
+  }
+  &.last_page span.next {
+    display: inline-block;
+  }
+  &.last_page a.next {
+    display: none;
+  }
+  span.last {
+    display: none;
+  }
+  &.last_page span.last {
+    display: inline-block;
+  }
+  &.last_page a.last {
+    display: none;
+  }
+  &.paged a.paged {
+    display: none;
+  }
+  &:not(.paged) *:not(.paged) {
+    display: none !important;
+  }
+}
+
+.footnotes {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #666;
+
+  li {
+    position: relative;
+    margin: 0;
+    padding-left: 10px;
+    line-height: 160%;
+
+    sup {
+      position: absolute;
+      left: 0;
+      top: 4px;
+    }
+    a {
+      color: inherit;
+    }
+    p {
+      margin: 5px 0 0 0;
+    }
+  }
+}
+
+.handwritten {
+  font-family: "Annie Use Your Telescope";
+  font-weight: normal;
+  color: #777;
+}
+
+

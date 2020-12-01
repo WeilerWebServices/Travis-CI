@@ -1,0 +1,50 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  TargetRubyVersion: 2.3
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/GuardClause:
+  Exclude:
+  - 'lib/travis/logs/services/fetch*.rb'
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 160
+  Exclude:
+  - 'spec/**/*'
+  - 'lib/travis/logs/app/opencensus.rb'
+  - 'lib/travis/logs/sidekiq/honeycomb.rb'
+
+Metrics/MethodLength:
+  Max: 40
+
+Metrics/ClassLength:
+  Max: 300
+
+Metrics/BlockLength:
+  Max: 30
+  Exclude:
+  - 'spec/**/*'
+
+Metrics/CyclomaticComplexity:
+  Max: 15
+
+Metrics/PerceivedComplexity:
+  Max: 15
+
+Style/GuardClause:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 100

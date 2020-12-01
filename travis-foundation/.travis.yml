@@ -1,0 +1,12 @@
+language: ruby
+rvm: 2.4.2
+sudo: false
+script: "./ci/buildscript"
+env:
+  global:
+  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+deploy:
+  provider: heroku
+  app: travis-foundation-website
+  on: master
+  api_key: $HEROKU_TOKEN

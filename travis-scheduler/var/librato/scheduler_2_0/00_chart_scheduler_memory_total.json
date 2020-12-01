@@ -1,0 +1,18 @@
+{
+  "name": "Scheduler Memory Total",
+  "type": "line",
+  "streams": [
+    {
+      "metric": "heroku.logs.memory_total",
+      "type": "gauge",
+      "source": "*scheduler*",
+      "group_function": "breakout",
+      "summary_function": "average",
+      "position": 0,
+      "split_axis": false
+    }
+  ],
+  "thresholds": [
+
+  ]
+}

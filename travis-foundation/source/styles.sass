@@ -1,0 +1,213 @@
+@import vendor/bourbon/bourbon
+@import styles/colors
+@import styles/vars-font_awesome
+
+$padding: 2.5em
+$base: 1.25rem // 20px
+$base-2: $base*2
+$base-3: $base*3
+$base-4: $base*4
+$base-6: $base*6
+$base-8: $base*8
+
+$header:     white
+$blurb-font: $yellow
+$blurb-bg-1: $violet
+$blurb-bg-2: $pink
+$lead:       white
+
+$rgsoc:                $violet
+$rgsoc-80:             $violet-80
+$rgsoc-tint:           tint($rgsoc, 85%)
+$rgsoc-shade:          shade($rgsoc, 10%)
+$rgsoc-contrast:       $yellow
+
+$diversity:            $blue
+$diversity-80:         $blue-80
+$diversity-tint:       tint($diversity, 80%)
+$diversity-shade:      shade($diversity, 10%)
+$diversity-contrast:   $yellow
+
+$internships:          $pink
+$internships-80:       $pink-80
+$internships-tint:     tint($internships, 80%)
+$internships-shade:    shade($internships, 10%)
+$internships-contrast: $yellow
+
+$packages-button-font: white
+$packages-button-bg:   $blue
+
+$company-packages:     $gray
+$company-packages-button: shade($gray, 10%)
+
+$thanks-folks:         $red-80
+
+$background-image-freckles: "/images/patterns/subtle_freckles_2.png"
+
+$blurb-background:    white
+$lead-background:      #eee url($background-image-freckles) fixed
+$projects-border:      #eee
+$sponsors-background:  #eee url($background-image-freckles) fixed
+$footer-background:    #eee url($background-image-freckles) fixed
+
+$box-shadow-top: inset 1px 6px 12px -5px #aaa
+
+$max-text-width: 56rem
+$image-heart: '/images/icons/heart.svg'
+
+@import styles/base
+@import styles/mixins
+@import styles/blurb
+@import styles/projects
+@import styles/sponsors
+@import styles/blog
+
+header
+  z-index: 3
+  position: fixed
+  top: 0
+  width: 100%
+  vertical-align: middle
+  background-color: white
+
+header, footer
+  height: $base-4
+  padding: 0 $base-2
+  line-height: $base-4
+  h1
+    color: black
+    a:hover
+      text-decoration: none
+  li
+    display: inline-block
+    margin-right: $base
+  a
+    color: #666
+
+header
+  h1
+    margin: auto 0
+    font-weight: 500
+    float: left
+    letter-spacing: 1px
+    span
+      @include image($image-heart, 23px, 23px)
+  ul
+    float: right
+
+footer
+  width: 100%
+  display: table
+  & > *
+    display: table-cell
+    width: 33%
+    padding: 1rem 0
+  h1
+    text-align: center
+    font-size: 1rem
+    span
+      @include image($image-heart, 14px, 14px)
+  .right
+    text-align: right
+  img
+    vertical-align: middle
+    filter: grayscale(100%)
+    -webkit-filter: grayscale(100%)
+    filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale")
+    &:hover
+      filter: none
+      -webkit-filter: none
+  #travis-mascot
+    width: 3rem
+  #made-in-berlin
+    width: 3.5rem
+
+
+#about
+  position: relative
+  h2
+    @include headline(before, -0.05rem, 44rem, 100%, 0.8deg, white, $pink)
+
+#contact
+  position: relative
+  h2
+    @include headline(before, -0.05rem, 44rem, 100%, -0.8deg, white, $violet)
+  & > a
+    content: ' '
+    position: absolute
+    display: block
+    top: $base-8
+    color: white
+    font-size: 1.5rem
+    @include calc(left, "50% - #{$base-2}")
+    @include circle($base-4, #EB2E66)
+    @include icon-after($chevron-down)
+    &:hover
+      text-decoration: none
+
+.default
+  article
+    padding: 4em 0
+    text-align: center
+    box-shadow: $box-shadow-top
+    background: $footer-background
+    p
+      max-width: $max-text-width
+      margin-left: auto
+      margin-right: auto
+  h2
+    margin: $base-6 0
+    font: 200 4rem 'Lato', $helvetica
+    text-align: center
+  p.nav
+    position: absolute
+    left: $base-2
+    top: 8.5rem
+    margin: 0
+    a
+      color: #ccc
+      font-size: 0.7em
+      &:hover
+        text-decoration: underline
+
+.blog
+  section
+    margin-top: 8.5rem
+    display: table
+  main, aside
+    display: table-cell
+    vertical-align: top
+  main
+    width: 60%
+    ul
+      margin: 24px 0
+      padding-left: 40px
+      li
+        font-size: 1.25rem
+        list-style-type: circle
+
+  article
+    padding: 0 2.5rem
+    margin-bottom: 3.5rem
+    h2
+      font-weight: 500
+      font-size: 1.65rem
+    .info
+      font-size: 0.9rem
+
+  #disqus_thread
+    margin-top: 3.5rem
+
+  aside
+    width: 20%
+    padding: 0 2.5rem
+    h3
+      margin-bottom: 0.5rem
+      text-align: left
+      font-size: 1rem
+      font-weight: normal
+    .twitter-timeline
+      margin-top: 3.5em
+
+  // footer
+  //   margin-top: 3.5rem

@@ -1,0 +1,38 @@
+language: ruby
+
+import:
+  - travis-ci/build-configs:db-setup.yml@epic-pricing
+
+rvm: 2.6.5
+
+cache: bundler
+
+env:
+  matrix:
+  - RAKE_TASK=spec
+  global:
+    secure: BdVC3OHqYcgePLrkKIk28Ewn/dxCYFf3Cx+Q8P+BCDj6UPJyRSbKmILBzuX96H5xhKmUFo0A/upUhJI9UUP9aXHO7MzRe04/c88QdO4wGacVUaIyB20S0pr262zbc/nA50K9cVgpmWc64n6uQR1tgM6ZyyBnBeXkLzCAOHPq99I=
+
+addons:
+  apt:
+    packages:
+      - rabbitmq-server
+
+services:
+- redis
+- rabbitmq
+
+jobs:
+ include:
+   - stage: "testing time"
+     script: bundle exec rspec spec
+   - stage: ":ship: it to quay.io"
+     dist: bionic
+     ruby:
+     services:
+     addons:
+     before_install: skip
+     before_script: skip
+     install: skip
+     script: make ship
+     if: commit_message =~ /ship:docker/ OR env(SHIP_DOCKER) = true

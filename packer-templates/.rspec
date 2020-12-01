@@ -1,0 +1,6 @@
+--color
+--format documentation
+--order rand
+--require pry
+--require support
+-I cookbooks/travis_packer_templates/libraries

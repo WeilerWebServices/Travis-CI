@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+gometalinter -D structcheck -D errcheck
+for pkg in server server/jsonapi db workers ; do
+  gometalinter -D structcheck -D errcheck "${pkg}"
+done

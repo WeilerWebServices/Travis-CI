@@ -1,0 +1,29 @@
+#!/bin/sh
+
+indent() {
+  sed -u 's/^/       /'
+}
+
+ENV_DIR=$3
+
+# Save result of the previous buildpack:
+cat $1/last_pack_release.out > $1/last_pack_release.out.backup
+
+echo "Compiling assets using production environment" | indent
+cd $1
+
+# install node for js runtime
+mkdir -p bin
+cd bin
+curl https://s3.amazonaws.com/heroku-buildpack-ruby/node-0.4.7.tgz -s -o - | tar xzf -
+chmod +x node
+cd ..
+
+
+[ -f $ENV_DIR/ENV ] && env=$(cat $ENV_DIR/ENV)
+env=${env:-production}
+
+# compile assets and copy minified version
+SLUG_VENDOR_BASE=`ruby -e "require 'rbconfig';puts \"/app/vendor/bundle/#{RUBY_ENGINE}/#{RbConfig::CONFIG['ruby_version']}\""`
+export GEM_PATH=$SLUG_VENDOR_BASE:$GEM_PATH
+PATH=$SLUG_VENDOR_BASE/bin:bin:$PATH ENV=$env bundle exec rakep build

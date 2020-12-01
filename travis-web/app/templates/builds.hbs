@@ -1,0 +1,33 @@
+{{#if this.model.isLoaded}}
+  <ul class="build-list">
+    {{#each this.builds as |build|}}
+      <BuildsItem @build={{build}} @vcsType={{this.repo.vcsType}} />
+    {{else}}
+      <NoBuilds />
+    {{/each}}
+  </ul>
+  <div class="flex flex--center flex--space-between flex--v-center">
+    {{#if this.showBuildHistoryLink}}
+      <div>
+        Previous build runs are available at
+        <ExternalLinkTo
+          @href={{this.buildHistoryLink}}
+          class="link link--underline link--teal"
+        >
+          travis-ci.org
+        </ExternalLinkTo>
+      </div>
+    {{/if}}
+    {{#if this.displayShowMoreButton}}
+      <p>
+        {{#if this.loadMoreBuilds.isRunning}}
+          <LoadingIndicator />
+        {{else}}
+          <ShowMoreButton @click={{perform this.loadMoreBuilds}} />
+        {{/if}}
+      </p>
+    {{/if}}
+  </div>
+{{else}}
+  <LoadingIndicator />
+{{/if}}

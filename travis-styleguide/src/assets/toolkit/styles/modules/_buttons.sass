@@ -1,0 +1,48 @@
+
+.button
+  position: relative
+  display: inline-block
+  margin: 0
+  padding: 5px 10px
+  overflow: visible
+  border: none
+  border-radius: 4px
+  background-clip: padding-box
+  background-color: #696867
+  color: $white
+  font-family: 'Source Sans Pro'
+  font-size: $font-size-s
+  font-weight: normal
+  text-decoration: none
+  text-align: center
+  white-space: nowrap
+  cursor: pointer
+  outline: none
+  &:hover,
+  &:active
+    background-color: lighten(#696867, 10)
+  &:focus
+    background-color: #696867
+
+.button--green
+  background-color: $green-dark
+  &:focus,
+  &:active,
+  &:hover
+    background-color: $green-light
+
+.button--red,
+  background-color: $red-dark
+  &:focus,
+  &:active,
+  &:hover
+    background-color: $red-light
+
+.button--round
+  width: 1.7rem
+  height: 1.7rem
+  padding: 0
+  border-radius: 50%
+  *
+    margin: auto
+

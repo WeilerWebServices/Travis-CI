@@ -1,0 +1,43 @@
+{
+  "name": "Events counts",
+  "type": "line",
+  "streams": [
+    {
+      "metric": "scheduler.service.event.job.canceled",
+      "type": "gauge",
+      "source": "*",
+      "group_function": "average",
+      "summary_function": "average",
+      "position": 0,
+      "split_axis": false
+    },
+    {
+      "metric": "scheduler.service.event.job.finished",
+      "type": "gauge",
+      "source": "*",
+      "group_function": "average",
+      "summary_function": "average",
+      "position": 1,
+      "split_axis": false
+    },
+    {
+      "metric": "scheduler.service.event.build.created",
+      "type": "gauge",
+      "source": "*",
+      "group_function": "average",
+      "summary_function": "average",
+      "position": 2,
+      "split_axis": false
+    },
+    {
+      "metric": "heroku.logs.releases",
+      "type": "annotation",
+      "source": "*",
+      "position": 3,
+      "split_axis": false
+    }
+  ],
+  "thresholds": [
+
+  ]
+}

@@ -1,0 +1,105 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+lib = File.expand_path('../cookbooks/lib', __dir__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+require 'optparse'
+require 'job_board_tags'
+
+def main(argv: ARGV)
+  parsed = parse_args(argv: argv)
+  assertions = [
+    [parsed[:tagset], parsed[:op], parsed[:base], parsed[:other]]
+  ]
+
+  assertions = stdin_assertions if parsed[:stdin]
+
+  tags = JobBoardTags.new
+  any_failed = false
+  assertions.each do |tagset, op, base, other|
+    if op !~ /eq|excl|incl/
+      warn "unknown op #{op.inspect}"
+      any_failed = true
+      next
+    end
+
+    if send(
+      "assert_#{op}",
+      tags.load_tagset(tagset, base),
+      tags.load_tagset(tagset, other)
+    )
+      $stdout.puts "✔︎: #{tagset} #{op} #{base} #{other}"
+      next
+    end
+    $stdout.puts "✘: #{tagset} #{op} #{base} #{other}"
+    any_failed = true
+  end
+
+  return 1 if any_failed
+
+  0
+end
+
+def stdin_assertions(stream = $stdin)
+  assertions = []
+
+  stream.each_line do |line|
+    tagset, op, base, other = line.split(':').map(&:strip)
+    rec = [tagset, op, base, other].compact.reject(&:empty?)
+    assertions << rec if rec.length == 4
+  end
+
+  assertions
+end
+
+def assert_eq(loaded_base, loaded_other)
+  loaded_base == loaded_other
+end
+
+def assert_excl(loaded_base, loaded_other)
+  (loaded_base & loaded_other).empty?
+end
+
+def assert_incl(loaded_base, loaded_other)
+  (loaded_base & loaded_other) == loaded_other
+end
+
+def parse_args(argv: ARGV)
+  parsed = {
+    op: ENV['OP'] || 'incl',
+    base: ENV['BASE'],
+    other: ENV['OTHER'],
+    tagset: ENV['TAGSET'],
+    stdin: false
+  }
+
+  OptionParser.new do |opts|
+    opts.on('-t TAGSET', '--tagset TAGSET', String,
+            'tag set on which to operate') do |v|
+      parsed[:tagset] = v.strip
+    end
+
+    opts.on('-o OP', '--op OP', String, 'tag set operator') do |v|
+      parsed[:op] = v.strip
+    end
+
+    opts.on('-b BASE', '--base BASE', String,
+            'base filename for tag set comparison') do |v|
+      parsed[:base] = v.strip
+    end
+
+    opts.on('-O OTHER', '--other OTHER', String,
+            'other filename for tag set comparison') do |v|
+      parsed[:other] = v.strip
+    end
+
+    opts.on('-i', '--stdin', 'read args from stdin') do
+      parsed[:stdin] = true
+    end
+  end.parse!(argv)
+
+  parsed
+end
+
+exit(main) if $PROGRAM_NAME == __FILE__

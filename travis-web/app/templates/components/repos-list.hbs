@@ -1,0 +1,11 @@
+{{#if this.repos}}
+  <ul class="repos-list">
+    {{#each this.repos as |repo|}}
+      <ReposListItem data-test-components-repos-list-item="true" @repo={{repo}} />
+    {{/each}}
+  </ul>
+{{else}}
+  <div class="loading-container">
+    {{this.noReposMessage}}
+  </div>
+{{/if}}

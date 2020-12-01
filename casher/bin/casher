@@ -1,0 +1,281 @@
+#!/usr/bin/env bash
+
+CURL_FORMAT=<<-EOF
+   time_namelookup:  %%{time_namelookup} s
+      time_connect:  %%{time_connect} s
+   time_appconnect:  %%{time_appconnect} s
+  time_pretransfer:  %%{time_pretransfer} s
+     time_redirect:  %%{time_redirect} s
+time_starttransfer:  %%{time_starttransfer} s
+    speed_download:  %%{speed_download} bytes/s
+                   ----------
+        time_total:  %%{time_total} s
+EOF
+
+ANSI_RED="\033[31;1m"
+ANSI_GREEN="\033[32;1m"
+ANSI_YELLOW="\033[33;1m"
+ANSI_RESET="\033[0m"
+ANSI_CLEAR="\033[0K"
+
+
+# TAR_DIR_NOT_FOUND_REGEXP = /(\w+): Not found in archive/
+
+MD5DEEP_CHECK_LOG_LIMIT=1000
+
+CASHER_DIR=${HOME}/.casher
+PATHS_FILE=${CASHER_DIR}/paths
+CHECKSUM_FILE_BEFORE=${CASHER_DIR}/md5sums_before
+CHECKSUM_FILE_AFTER=${CASHER_DIR}/md5sums_after
+FETCH_TAR=${CASHER_DIR}/fetch.tgz
+PUSH_TAR=${CASHER_DIR}/push.tgz
+
+DIFF_FILE=${CASHER_DIR}/checksum_diff
+
+args=()
+
+function process_flags {
+  local name
+  for arg in $@; do
+     case $arg in
+      --name )
+        shift
+        name=$1
+        shift
+        PATHS_FILE=${CASHER_DIR}/${name}.paths
+        CHECKSUM_FILE_BEFORE=${CASHER_DIR}/${name}.md5sums_before
+        CHECKSUM_FILE_AFTER=${CASHER_DIR}/${name}.md5sums_after
+        FETCH_TAR=${CASHER_DIR}/${name}-fetch.tgz
+        PUSH_TAR=${CASHER_DIR}/${name}-push.tgz
+        ;;
+      *)
+        break
+        ;;
+    esac
+  done
+
+  args=($(echo "$@"))
+}
+
+function setup {
+  install_md5deep
+  mkdir -p $CASHER_DIR
+}
+
+function checksum_checker {
+  if [[ -n $(command -v md5deep64) ]]; then
+    echo "md5deep64"
+  else
+    echo "md5deep"
+  fi
+}
+
+function msg {
+  local text=$1
+  local color=$2
+  local marker
+
+  case $color in
+    green )
+      marker=$ANSI_GREEN
+      ;;
+    red )
+      marker=$ANSI_RED
+      ;;
+    yellow )
+      marker=$ANSI_YELLOW
+      ;;
+    * )
+      ;;
+  esac
+
+  printf "${marker}%s${ANSI_RESET}\n" "$text"
+}
+
+function run {
+  local archive_type=$1
+  case $archive_type in
+    cache|workspace)
+    shift
+    ;;
+    *)
+    archive_type=cache
+    ;;
+  esac
+
+  local subcommand=$1
+  shift
+
+  case $subcommand in
+    fetch|add|push)
+    $subcommand $@
+      ;;
+    * )
+      echo "unknown command $subcommand"
+      exit 1
+      ;;
+  esac
+}
+
+function fetch {
+  msg "attempting to download ${archive_type} archive"
+
+  for url in "$@"; do
+    display_name=$(display_name $url)
+
+    msg "fetching ${display_name}" green
+
+    curl $url -o ${FETCH_TAR} -f -s --retry 3 >${CASHER_DIR}/fetch.log 2>${CASHER_DIR}/fetch.err.log
+    if [[ $? = 0 ]]; then
+      msg "found ${archive_type}" green
+      return
+    fi
+  done
+
+  msg "could not download ${archive_type}" red
+}
+
+function add {
+  if [[ $# -eq 0 ]]; then
+    msg "No directory specified to be added" yellow
+    return
+  fi
+
+  paths=$(expand_path "$@")
+
+  for path in ${paths}; do
+    if [[ -L ${path} ]]; then
+      msg "${path} is a symbolic link to $(readlink ${path}); not following"
+      continue
+    fi
+
+    msg "adding ${path} to ${archive_type}"
+    if [[ ! -e "${path}" ]]; then
+      msg "creating directory ${path}"
+      mkdir -p ${path}
+    fi
+
+    echo "${path}" >> ${PATHS_FILE}
+  done
+
+  touch ${CHECKSUM_FILE_BEFORE}
+
+  if [[ -e ${FETCH_TAR} ]]; then
+    # expand the archive, while recording directories not found in the archive
+    dir_not_found=$(tar xPf ${FETCH_TAR} ${paths} 2>&1 | grep 'Not found' | sed -e 's/tar: \(.*\): Not found.*$/\1/g')
+    IFS=" "
+    for dir in ${dir_not_found}; do
+      msg "${dir} is not yet cached" red
+    done
+    unset IFS
+  fi
+
+  $(checksum_checker) -o f -r ${paths} | sort >> ${CHECKSUM_FILE_BEFORE}
+}
+
+function push {
+  local url
+  url=$1
+
+  changed_p
+  if [[ $CHANGED_P != TRUE ]]; then
+    msg "nothing changed" green
+    return
+  fi
+
+  msg "changes detected, packing new archive" green
+
+  GZIP=-3 tar --format=posix -Pczf ${PUSH_TAR} $(<${PATHS_FILE})
+
+  msg "uploading $(display_name $url)" green
+  curl -T ${PUSH_TAR} $url -f -v >${CASHER_DIR}/push.log 2>${CASHER_DIR}/push.err.log
+  if [[ $? -eq 0 ]]; then
+    msg "${archive_type} uploaded" green
+  else
+    msg "failed to upload ${archive_type}" red
+    # TODO filter and dump logs
+  fi
+}
+
+function install_md5deep {
+  local os
+
+  if [[ -z $(command -v md5deep) ]]; then
+    msg "Installing md5deep"
+    os=$(uname | tr 'A-Z' 'a-z')
+    case ${os} in
+      darwin )
+        brew install md5deep
+        ;;
+      linux)
+        # on apt, `md5deep` is a wrapper for `hashdeep`, which provides
+        # /usr/bin/hashdeep
+        if [[ -z $(command -v hashdeep) ]]; then
+          sudo apt-get install md5deep
+        fi
+        # on Xenial only, the apt package does not contain `/usr/bin/md5deep`
+        # (but it does, Bionic onward) so we create a symlink to sidestep the issue
+        if [[ ! -e /usr/bin/md5deep && -e /usr/bin/hashdeep ]]; then
+          sudo ln -sf /usr/bin/hashdeep /usr/bin/md5deep
+        fi
+        ;;
+      msys_nt* | mingw*)
+        chocolatey install hashdeep
+        ;;
+      freebsd)
+        sudo pkg install -y md5deep
+        ;;
+    esac
+  fi
+}
+
+function changed_p {
+  local diff_file_size change_msg
+  unset CHANGED_P
+
+  if [[ ! -e ${FETCH_TAR} ]]; then
+    CHANGED_P=TRUE
+    return
+  fi
+
+  sort ${CHECKSUM_FILE_BEFORE} | uniq > ${CHECKSUM_FILE_BEFORE}.sorted
+  $(checksum_checker) -o f -r $(<${PATHS_FILE}) | sort | uniq > ${CHECKSUM_FILE_AFTER}
+  diff -B ${CHECKSUM_FILE_BEFORE}.sorted ${CHECKSUM_FILE_AFTER} | \
+    awk '/^[<>]/ {for (i=3; i<=NF; i++) printf("%s%s", $(i), i<NF? OFS : "\n")};' | sort | uniq > ${DIFF_FILE}
+
+  if [[ -s ${DIFF_FILE} ]]; then # DIFF_FILE has nonzero file size
+    change_msg="changes detected (content changed, file is created, or file is deleted):\n$(head -c ${MD5DEEP_CHECK_LOG_LIMIT} ${DIFF_FILE})\n"
+    diff_file_size=$(wc -c ${DIFF_FILE} | awk '{print $1}')
+    if [[ ${diff_file_size} -gt ${MD5DEEP_CHECK_LOG_LIMIT} ]]; then
+      change_msg="${change_msg}..."
+    fi
+    msg "${change_msg}" green
+    CHANGED_P=TRUE
+  fi
+}
+
+function display_name {
+  local url penultimate ultimate
+  url=$1
+
+  IFS=/
+  for part in ${url%\?*}; do
+    penultimate=$ultimate
+    ultimate=$part
+  done
+  unset IFS
+  echo "${penultimate}/${ultimate}"
+}
+
+function expand_path {
+  ruby -e "puts ARGV.map{|x| File.expand_path(x)}.join(' ')" "$@"
+}
+
+function main {
+  # $0 [opts] [cache|workspace] [globs]
+  process_flags "$@"
+  setup
+  run "${args[@]}"
+}
+
+main "$@"

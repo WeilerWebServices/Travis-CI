@@ -1,0 +1,81 @@
+#thanks-folks {
+  table {
+    width: 100%;
+    margin: 24px 0 12px 0;
+    border-collapse: collapse;
+
+    tr {
+      border-color: #ddd;
+      border-width: 1px 0;
+    }
+    tr:nth-child(even) {
+      background-color: #F2F4F9;
+    }
+
+    td {
+      padding: 5px;
+      white-space: nowrap;
+      &:last-child {
+        white-space: normal;
+        font-size: 13px;
+      }
+    }
+    col {
+      &.col-gravatar {
+        width: 45px;
+      }
+      &.col-name {
+        width: 200px;
+      }
+      &.col-amount {
+        width: 60px;
+      }
+      &.col-package {
+        width: 120px;
+      }
+      &.col-date {
+        width: 120px;
+      }
+    }
+    .twitter, .github, .subscription {
+      display: inline-block;
+      overflow: hidden;
+      width: 16px;
+      height: 18px;
+      text-indent: 16px;
+      background: no-repeat center 2px;
+    }
+    .github {
+      margin-left: 8px;
+      background-image: url(/images/icons/github.png);
+    }
+    .twitter {
+      margin-left: 5px;
+      background-image: url(/images/icons/twitter.png);
+    }
+    .package {
+      float: left;
+      padding: 3px 10px;
+      background-color: #3f9c33;
+      font-size: 14px;
+      color: white;
+      white-space: nowrap;
+      @include border-radius(8px)
+    }
+    .subscription {
+      float: left;
+      margin-left: 5px;
+      background-image: url(/images/icons/recurring.png);
+    }
+
+    img {
+      width: 35px;
+      height: 35px;
+      @include border-radius(3px);
+      @include box-shadow(1px 1px 3px #ddd);
+    }
+  }
+  .sidenote {
+    top: 80px;
+  }
+}

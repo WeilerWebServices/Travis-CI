@@ -1,0 +1,28 @@
+dist: xenial
+language: shell
+
+script:
+  - true
+
+addons:
+  snaps:
+  - name: snapcraft
+    channel: stable
+    confinement: classic
+  - name: lxd
+    channel: stable
+
+before_deploy:
+  - sudo /snap/bin/lxd.migrate -yes
+  - sudo /snap/bin/lxd waitready
+  - sudo /snap/bin/lxd init --auto
+  - .travis/providers/snap/prepare
+
+deploy:
+  - provider: snap
+    snap: '**/dee-pee-ell-test_*.snap'
+    channel: edge
+
+after_deploy:
+  - sudo snap install dee-pee-ell-test --edge
+  - .travis/providers/snap/test || TRAVIS_TEST_RESULT=$?

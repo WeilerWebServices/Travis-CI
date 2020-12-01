@@ -1,0 +1,32 @@
+%p.navigation= link_to 'Your profile &rarr;'.html_safe, profile_path
+
+#order
+  %h2= "#{subscription? ? 'Subscription' : 'Package'}: #{order.package.name}"
+
+  - if order.cancelled?
+    %p This subscription has been cancelled.
+
+  %dl
+    %dt Price
+    %dd= number_to_currency order.total_in_dollars
+    %dt Ordered
+    %dd= l order.created_at, format: :short
+    - if order.cancelled?
+      %dt Cancelled
+      %dd= l order.cancelled_at, format: :short
+
+  %h3 Address
+  %dl
+    %dt Name
+    %dd= billing_address.name
+    %dt Street
+    %dd= billing_address.street
+    %dt Zip
+    %dd= billing_address.zip
+    %dt City
+    %dd= billing_address.city
+    - if billing_address.state.present?
+      %dt State
+      %dd= billing_address.state
+    %dt Country
+    %dd= billing_address.country

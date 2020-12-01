@@ -1,0 +1,128 @@
+#!/usr/bin/env ruby
+
+# Triggers a build on travis-ci.org/travis-ci/dpl.
+#
+# Requires either ENV['TRAVIS_API_TOKEN'] to be set, or -t/--token to
+# be given.
+#
+# If no arguments are given then jobs for all providers are included,
+# otherwise arguments are interpreted as provider names and matched
+# against YAML config files in .travis/providers.
+
+require 'json'
+require 'net/http'
+require 'securerandom'
+require 'optparse'
+require 'yaml'
+
+def parse_opts(opts)
+  ARGV.options do |o|
+    o.on('-u', '--url URL') { |obj| opts[:url] = obj }
+    o.on('-t', '--token TOKEN') { |obj| opts[:token] = obj }
+    o.on('-b', '--branch BRANCH') { |obj| opts[:branch] = obj }
+    o.on('-r', '--repo REPO') { |obj| opts[:source] = obj }
+    o.on('-s', '--source REPO') { |obj| opts[:source] = obj }
+    o.on('--strategy NAME') { |obj| opts[:strategy] = obj }
+    o.on('--released') { opts[:released] = true }
+    o.on('--pretend') { opts[:pretend] = true }
+    o.on('--error') { opts[:error] = true }
+    o.parse!
+  end
+  opts
+end
+
+def post(uri, body, opts)
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = true
+
+  req = Net::HTTP::Post.new(uri.path)
+  req['Authorization'] = "token #{opts[:token]}"
+  req['Content-Type'] = 'application/json'
+  req['Travis-API-Version'] = '3'
+  req.body = JSON.dump(body)
+
+  http.request(req)
+end
+
+SKIP = [
+  'anynines',       # trial account expired?
+  'azure_web_apps', # trial account expired
+  'cloud66',        # unfinished
+  'datica',         # no account
+  'gae',            # suddenly started failing with "api not enabled" https://travis-ci.com/travis-ci/dpl/jobs/241090908#L412
+  'hephy',          # keeps failing
+  'npm-github',     # not fully implemented, yet
+  'openshift'      # trial account expired
+]
+
+def skip?(path)
+  return false if ARGV.any? { |name| path.include?(name) }
+  SKIP.any? { |name| path.include?(name) }
+end
+
+def paths(opts)
+  glob = ARGV.any? ? ARGV.join(',') : '*'
+  paths = Dir[".travis/providers/{#{glob}}/*.yml"].sort
+  paths = paths.reject { |path| skip?(path) }
+  paths = paths.select { |path| path.include?(opts[:strategy]) } if opts[:strategy]
+  abort "No configs found for #{glob}" if paths.empty?
+  paths
+end
+
+def error(config)
+  keys = config.keys - %w(provider cleanup keep_history)
+  keys = keys.select { |key| config[key].is_a?(String) || config[key].is_a?(Hash) && config[key]['secure'] }
+  keys.each { |key| config[key] = 'kaputt' }
+  config
+end
+
+def deploy(conf, opts)
+  conf[:edge] ||= only(opts, :branch, :source).merge(conf[:edge] || {})
+  conf[:on] ||= opts[:branch] if opts[:branch]
+  conf[:edge] = true if opts[:released]
+  conf = error(conf) if opts[:error]
+  conf
+end
+
+def jobs(opts)
+  paths(opts).map do |path|
+    job = YAML.load(File.read(path))
+    job['name'] = path =~ %r(providers/(.+)/(.+)\.yml) && [$1, $2 == 'travis' ? nil : $2].compact.join(':')
+    job['deploy'] = Array(job['deploy']).map { |conf| deploy(conf, opts) }
+    job
+  end
+end
+
+def only(hash, *keys)
+  hash.select { |key, _| keys.include?(key) }.to_h
+end
+
+opts = parse_opts(token: ENV['TRAVIS_API_TOKEN'], branch: 'master')
+
+uri = URI.parse(opts[:url] || 'https://api.travis-ci.com/repo/travis-ci%2Fdpl/requests')
+
+body = {
+  request: {
+    branch: opts[:branch],
+    message: "test dpl (#{opts[:branch]}) #{ARGV.any? ? ARGV.join(', ') : '(all providers)'} #{Time.now}",
+    config: {
+      merge_mode: :replace,
+      env: {
+        global: {
+          ID: SecureRandom.hex
+        }
+      },
+      matrix: {
+        include: jobs(opts)
+      }
+    }
+  }
+}
+
+if opts[:pretend]
+  puts JSON.pretty_generate(body)
+else
+  res = post(uri, body, opts)
+  p res.code.to_i
+  puts res.body
+end

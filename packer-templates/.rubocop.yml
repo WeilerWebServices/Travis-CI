@@ -1,0 +1,17 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  TargetRubyVersion: 2.4
+  Exclude:
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - 'run-foodcritic'
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 30
+
+Performance/RegexpMatch:
+  Enabled: false

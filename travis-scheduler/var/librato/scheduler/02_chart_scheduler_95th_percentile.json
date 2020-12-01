@@ -1,0 +1,29 @@
+{
+  "name": "Scheduler 95th percentile",
+  "type": "stacked",
+  "streams": [
+    {
+      "metric": "enqueue.total.95th_percentile",
+      "type": "gauge",
+      "source": "*",
+      "group_function": "average",
+      "summary_function": "average",
+      "split_axis": false
+    },
+    {
+      "metric": "enqueue.fetch_jobs.95th_percentile",
+      "type": "gauge",
+      "source": "*",
+      "group_function": "average",
+      "summary_function": "average",
+      "split_axis": false
+    },
+    {
+      "metric": "heroku.logs.releases",
+      "type": "annotation",
+      "source": "*",
+      "split_axis": false
+    }
+  ],
+  "thresholds": null
+}

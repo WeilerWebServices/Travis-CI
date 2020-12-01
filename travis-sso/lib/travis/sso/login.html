@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,800' rel='stylesheet' type='text/css'>
+    <title>Travis CI - Single Sign-On</title>
+    <link rel="icon" type="image/png" href="%public%/favicon.ico">
+    <script>
+      window.addEventListener('message', function(event) {
+        if(getHostName(event.origin) == getHostName("%endpoint%")) {
+          if(event.data.token) {
+            document.getElementById('sso_token').value = event.data.token;
+            document.forms[0].submit();
+          } else if(event.data == "redirect") {
+            window.location = "%endpoint%/auth/handshake?redirect_uri=%origin%";
+          }
+        }
+      });
+      window.setTimeout(function() {
+        document.getElementById('warning').style.display = 'inherit';
+      }, 10000);
+      function getHostName(url) {
+        return url.split("//")[1].split("/")[0].split("?")[0];
+      }
+    </script>
+    <style>
+      @-webkit-keyframes blink { 0% { opacity: 0 } 100% { opacity: 1 } }
+      @-moz-keyframes    blink { 0% { opacity: 0 } 100% { opacity: 1 } }
+      @keyframes         blink { 0% { opacity: 0 } 100% { opacity: 1 } }
+      form { display:none; }
+      iframe { display:none; }
+      body {
+        background-color: #ffffff;
+        font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+        color: #337389;
+      }
+      #login {
+        text-align: center;
+        margin-top: 8%;
+      }
+      #message {
+        margin-top: 45px;
+        font-size: 35px;
+        font-weight: bold;
+      }
+      a {
+        text-decoration: underline;
+        color: #40454F;
+      }
+      #warning {
+        margin-top: 20px;
+        font-size: 20px;
+        color: #919191;
+        display: none;
+      }
+    </style>
+  </head>
+  <body id="sso">
+    <form method="post">
+      <input type="hidden" name="authenticity_token" id="authenticity_token" value="%csrf%">
+      <input type="hidden" name="sso_token" id="sso_token">
+    </form>
+    <iframe src="%endpoint%/auth/post_message?origin=%origin%"></iframe>
+    <div id='login'>
+      <img src='%public%/mustache-spinner.gif' alt='Travis CI' id='logo' />
+      <div id='message'>Authenticating</div>
+      <div id='warning'>
+        Authentication seems to take awfully long.</br> Please
+        <a href="%endpoint%/auth/handshake?redirect_uri=%origin%">make sure</a> you are properly logged in.
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+<%= title(@repository) %>
+<%= '-' * (title(@build).size + 20) %>
+
+Build: #<%= @build.number %>
+Status: <%= @result_message.short %>
+
+Duration: <%= duration_in_words(@build.started_at, @build.finished_at) %>
+Commit: <%= @commit.sha[0..6] %> (<%= @commit.branch %>)
+Author: <%= @commit.author_name %>
+Message: <%= @commit.message %>
+
+View the changeset: <%= @commit.compare_url %>
+
+View the full build log and details: <%= repository_build_url(slug: @repository.vcs_slug, id: @build.id, vcs_type: @repository.vcs_type) %>
+
+<% if @build.state == 'canceled' %>
+  Restart your build: <%= repository_build_url(slug: @repository.vcs_slug, id: @build.id, vcs_type: @repository.vcs_type) %>
+<% end %>
+
+--
+
+You can unsubscribe from build emails from the <%= @repository.slug %> repository going to <%= repository_unsubscribe_url(@repository) %>.
+Or unsubscribe from *all* email updating your settings at <%= unsubscribe_url %>.
+Or configure specific recipients for build notifications in your .travis.yml file. See https://docs.travis-ci.com/user/notifications.

@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+
+: ${HOST:=http://localhost}
+: ${PORT:=42151}
+: ${PUDDING_AUTH_TOKEN:=swordfish}
+
+case "$1" in
+  instance-build)
+    exec curl \
+      -s \
+      -H "Authorization: token ${PUDDING_AUTH_TOKEN}" \
+      -X POST \
+      -d "{
+            \"instance_builds\": {
+              \"count\": 1,
+              \"site\": \"org\",
+              \"env\": \"test\",
+              \"queue\": \"docker\",
+              \"role\": \"worker\",
+              \"instance_type\": \"c3.4xlarge\"
+            }
+          }" \
+      ${HOST}:${PORT}/instance-builds
+    ;;
+  autoscaling-group-build)
+    if [[ $# < 4 ]] ; then
+      echo "Usage: $(basename $0) autoscaling-group-build <instance-id> <role-arn> <topic-arn>"
+      exit 1
+    fi
+    exec curl \
+      -v \
+      -H "Authorization: token ${PUDDING_AUTH_TOKEN}" \
+      -X POST \
+      -d "{
+            \"autoscaling_group_builds\": {
+              \"site\": \"${SITE:-org}\",
+              \"env\": \"${ENV:-staging}\",
+              \"queue\": \"${QUEUE:-docker}\",
+              \"role\": \"${ROLE:-worker}\",
+              \"instance_id\": \"$2\",
+              \"role_arn\": \"$3\",
+              \"topic_arn\": \"$4\",
+              \"instance_type\": \"${INST:-c3.2xlarge}\",
+              \"slack_channel\": \"${SLACK_CHANNEL:-#general}\"
+            }
+          }" \
+      ${HOST}:${PORT}/autoscaling-group-builds
+    ;;
+  list-instances)
+    exec curl \
+      -s \
+      -H "Authorization: token ${PUDDING_AUTH_TOKEN}" \
+      ${HOST}:${PORT}/instances
+    ;;
+  terminate-instance)
+    if [[ ! $2 ]] ; then
+      echo "missing instance id"
+      exit 1
+    fi
+    exec curl \
+      -s \
+      -H "Authorization: token ${PUDDING_AUTH_TOKEN}" \
+      -X DELETE \
+      ${HOST}:${PORT}/instances/$2
+    ;;
+  bogus-instance-build)
+    exec curl \
+      -s \
+      -H "Authorization: token ${PUDDING_AUTH_TOKEN}" \
+      -X POST \
+      -d "{\"instance_builds\": {}}" \
+      ${HOST}:${PORT}/instance-builds
+    ;;
+  shutdown)
+    exec curl \
+      -s \
+      -H "Authorization: token ${PUDDING_AUTH_TOKEN}" \
+      -X DELETE \
+      ${HOST}:${PORT}/
+    ;;
+  kaboom)
+    exec curl \
+      -s \
+      -H "Authorization: token ${PUDDING_AUTH_TOKEN}" \
+      -X POST \
+      ${HOST}:${PORT}/kaboom
+    ;;
+  expvars)
+    exec curl \
+      -s \
+      -H "Authorization: token ${PUDDING_AUTH_TOKEN}" \
+      ${HOST}:${PORT}/debug/vars
+    ;;
+  *)
+    echo "unknown request type '$1'"
+    exit 1
+    ;;
+esac

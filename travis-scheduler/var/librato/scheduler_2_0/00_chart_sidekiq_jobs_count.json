@@ -1,0 +1,25 @@
+{
+  "name": "Sidekiq jobs count",
+  "type": "line",
+  "streams": [
+    {
+      "metric": "sidekiq.jobs.scheduler-2.perform",
+      "type": "gauge",
+      "source": "*",
+      "group_function": "average",
+      "summary_function": "average",
+      "position": 0,
+      "split_axis": false
+    },
+    {
+      "metric": "heroku.logs.releases",
+      "type": "annotation",
+      "source": "*",
+      "position": 1,
+      "split_axis": false
+    }
+  ],
+  "thresholds": [
+
+  ]
+}

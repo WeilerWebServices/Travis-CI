@@ -1,0 +1,89 @@
+%section#company-packages.collapsed
+  %h2 Company Packages
+  %a.toggle{href: '#'}
+
+  %p
+    With the help of
+    %a{href: 'http://twitter.com/#!/csshsh'} Florian Weber
+    %sup 1
+    we have set up silver, gold and platinum packages for you. If these don't fit what you are looking for then
+    %a{href: '#contact'} please get in contact!
+  %p
+    All of them include heaps of Tweet love, linked banners on prominent Travis CI pages,
+    mentions at conference talks, and a post on our blog. Please see our
+    %a{href: '/company_packages'} company packages
+    for details.
+
+  %ul.packages.clearfix
+    %li.platinum
+      %h4
+        Platinum
+        .price-tag
+          = number_to_currency Package.price(:platinum)
+      %p
+        Premium exposure on Travis CI pages and conference talks.
+      %p
+        Have Josh, Konstantin and/or Sven at your office
+        %sup 3
+        for a day or two for support or pairing sessions.
+        %sup 2
+      %p
+        4 spots available.
+      - if Order.find_all_by_package("platinum").size < 4
+        = link_to 'Donate', new_package_path(package: 'platinum')
+      - else
+        %a.sold_out Sold Out!
+      = stats_for(:platinum, :sponsor)
+
+    %li.gold
+      %h4
+        Gold
+        .price-tag
+          = number_to_currency Package.price(:gold)
+      %p
+        Prominent exposure on Travis CI pages and conference talks.
+      %p
+        Have Josh, Konstantin or Sven at your office
+        %sup 3
+        for a day for support or pairing sessions.
+        %sup 2
+      %p
+        8 spots available.
+      - if Order.find_all_by_package("gold").size < 8
+        = link_to 'Donate', new_package_path(package: 'gold')
+      - else
+        %a.sold_out Sold Out!
+      = stats_for(:gold, :sponsor)
+
+    %li.silver
+      %h4
+        Silver
+        .price-tag
+          = number_to_currency Package.price(:silver)
+      %p
+        Exposure on Travis CI pages and conference talks.
+      %p
+        3 hour remote pairing with Josh, Konstantin, Sven or one of our volunteers.
+        %sup 2
+      = link_to 'Donate', new_package_path(package: 'silver')
+      = stats_for(:silver, :sponsor)
+
+  %ul.footnotes
+    %li
+      %sup 1
+      = succeed ',' do
+        %a{href: 'http://rubyonrails.org/core/alumni'} Rails core alumni
+      early
+      = succeed ',' do
+        %a{href: 'http://twitter.com'} Twitter lead dev
+      founder of
+      = succeed '.' do
+        %a{href: 'http://amenhq.com'} Amen
+    %li
+      %sup 2
+      These are just our ideas. We are open for ideas that fit your company better, so feel free to
+      %a{href: '#contact'} ask.
+    %li
+      %sup 3
+      You will need to help with travel and accommodation if you're not based close to us.
+      %a{href: '#contact'} Let's talk!

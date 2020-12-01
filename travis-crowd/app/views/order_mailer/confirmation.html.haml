@@ -1,0 +1,16 @@
+%h2
+  Thank you so much for your support!
+%p
+  You have just ordered the <em>#{order.package.name}</em> #{order.subscription? ? 'subscription' : 'package'}
+  which means you have donated <em>#{number_to_currency order.total_in_dollars}</em> to Travis CI.
+%p
+  We can't express how much we appreciate your support.
+%p
+  The amount has been charged on your credit card and you should have received a confirmation from Stripe.
+
+- unless order.package.id == :nano
+  %p
+    Included in this #{order.subscription? ? 'subscription' : 'package'} are the following features:
+  = render partial: "order_mailer/features/#{order.package.id}"
+
+= render partial: 'order_mailer/invoice'

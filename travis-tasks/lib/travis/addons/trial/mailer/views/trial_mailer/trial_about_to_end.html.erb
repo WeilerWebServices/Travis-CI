@@ -1,0 +1,23 @@
+            <!-- Trial Message Section -->
+            <tr>
+              <td id="trial-message-section" align="center" valign="top" style="padding-bottom: 40px;">
+                <h1 id="trial-message-header">Your Travis CI Trial</h1>
+                <p id="trial-message" style="margin: 0px; font-size: 18px;">The trial for your Travis CI account
+                  <span id="trial-message-github-name" style="font-size: 18px; color:#15B75E;">
+                    <%= @owner[:name].blank? ? @owner[:login] : "#{@owner[:name]} (#{@vcs_name} name: #{@owner[:login]})" %>
+                  </span>
+                  is close to running out.
+                </p>
+              </td>
+            </tr>
+            <!-- Builds left Section -->
+            <tr>
+              <td id="builds-left-section" align="center" valign="top" style="padding-bottom: 20px;">
+                <img id="build-crane-logo" src="https://gallery.mailchimp.com/2c4f451f4059350287b951060/images/7120d93f-1748-4517-874e-67a3c36f5ebf.png" alt="Build Crane">
+                <p id="trial-builds-remaining" style="margin: 0px; padding: 10px 0px 20px 0px; font-size: 26px; font-weight: 300; line-height: 125%;
+                          letter-spacing: normal; color: #0068FF;">You have
+                  <%= @builds_remaining %>
+                  builds left
+                </p>
+              </td>
+            </tr>

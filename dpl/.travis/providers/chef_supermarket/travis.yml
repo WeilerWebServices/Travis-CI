@@ -1,0 +1,19 @@
+language: shell
+
+script:
+  - true
+
+before_deploy:
+  - mkdir -p tmp/dpl_test
+  - openssl aes-256-cbc -K $encrypted_ee862e3b87bc_key -iv $encrypted_ee862e3b87bc_iv -in .travis/providers/chef_supermarket/private_key.enc -out tmp/dpl_test/private_key -d
+  - .travis/providers/chef_supermarket/prepare
+
+deploy:
+  - provider: chef_supermarket
+    user_id: dpl-test
+    client_key: private_key
+    category: Other
+    dir: tmp/dpl_test
+
+after_deploy:
+  - .travis/providers/chef_supermarket/test || TRAVIS_TEST_RESULT=$?

@@ -1,0 +1,48 @@
+language: ruby
+
+import:
+  - travis-ci/build-configs:db-setup.yml@postgres-9.6
+
+rvm: 2.4.9
+
+cache: bundler
+
+env:
+  global:
+    - PATH=/snap/bin:$PATH
+    - COVERAGE=1
+
+addons:
+  apt:
+    packages:
+      - rabbitmq-server
+
+services:
+  - memcached
+  - redis
+  - rabbitmq
+
+before_install:
+  - bundle config https://gems.contribsys.com/ $BUNDLE_GEMS__CONTRIBSYS__COM
+  - 'gem install bundler:1.16.2'
+
+jobs:
+  include:
+    - stage: "testing time"
+      script: bundle exec rspec
+      before_install:
+        - "gem update --system"
+        - "gem install bundler -v 1.16.2"
+    - stage: ":ship: it to quay.io"
+      dist: bionic
+      ruby:
+      services:
+      addons:
+        snaps:
+          - name: docker
+            channel: latest/beta
+      before_install: echo "skipping"
+      install: echo "skipping"
+      before_sript: skip
+      script: make ship
+      if: (branch = master and type = push ) OR commit_message =~ /ship:docker/ OR env(SHIP_DOCKER) = true

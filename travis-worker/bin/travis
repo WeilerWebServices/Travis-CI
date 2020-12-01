@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+$: << 'lib'
+require 'rubygems'
+require 'travis/worker/cli'
+require 'thor/runner'
+
+ARGV[0] = "travis:#{ARGV[0]}"
+Thor::Runner.start
+

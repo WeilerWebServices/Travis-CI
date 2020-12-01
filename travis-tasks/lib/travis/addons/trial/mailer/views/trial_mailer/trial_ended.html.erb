@@ -1,0 +1,12 @@
+            <!-- Trial Message Section -->
+            <tr>
+              <td id="trial-message-section" align="center" valign="top" style="padding-bottom: 40px;">
+                <h1 id="trial-message-header">Your Travis CI Trial</h1>
+                <p id="trial-message" style="margin: 0px; font-size: 18px;">Unfortunately the trial for your account
+                  <span id="trial-message-github-name" style="font-size: 18px; color:#15B75E;">
+                    <%= @owner[:name].blank? ? @owner[:login] : "#{@owner[:name]} (GitHub name: #{@owner[:login]})" %>
+                  </span>
+                  has just expired.
+                </p>
+              </td>
+            </tr>
